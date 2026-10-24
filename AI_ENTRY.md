@@ -20,6 +20,12 @@ When a user invokes `access:github owner/repo init.md`, `#init owner/repo`, or r
 7. Do not enumerate files or commands unless requested. Do not ask the user to paste instructions or perform checks the agent can do itself.
 8. Keep the protocol source separate from the active project. Loading the protocol does not select it as the active project; an explicit command such as `#install owner/repo` does.
 
+## Protocol repository is read-only for consumers
+
+The public `francis-h-francisco/agent-protocols` repository is a maintained source of instructions. Agents consuming it are users, not contributors. Unless the user explicitly identifies themselves as the repository maintainer and directly authorizes a protocol change, do not edit files, create branches, commit, push, open PRs, or sync changes to this repository. Commands that load, install, or follow the protocol are not permission to modify the protocol source. If you find a defect, explain the proposed fix to the user without publishing it. Do not infer authorization from public visibility or available write credentials.
+
+This restriction applies only to the protocol source repository. It does not prevent authorized work in a separately designated project repository.
+
 ## Project execution
 
 1. Read the target repository README, agent/contributor instructions, playbook/specifications, state, task queue, logs, checkpoints, and relevant source files.
