@@ -9,3 +9,9 @@
 - Do not run destructive commands, delete user data, rewrite history, or execute unknown scripts without review and approval.
 - Minimize personal data in durable logs.
 - If a secret is exposed, stop, notify the owner, recommend revocation/rotation, and remove it from future commits; deleting a latest-version file does not erase history.
+
+## Protocol repository is read-only for consumer agents
+
+The public `francis-h-francisco/agent-protocols` repository is maintained by its owner. Agents using its instructions are consumers, not contributors. Do not create or update files, branches, commits, pushes, pull requests, or synchronization changes there unless the owner explicitly authorizes a specific maintenance task. Do not treat public visibility, an available GitHub connection, or a protocol command as write permission. Report proposed improvements to the user without publishing them.
+
+This is a behavioral policy, not a technical GitHub permission control. Repository administrators should separately review connected apps, credentials, branch rules, and bypass permissions.
