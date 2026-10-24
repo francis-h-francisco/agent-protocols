@@ -9,11 +9,15 @@ Commands express workflow intent, not platform permissions.
 - `#install owner/repo` — inspect and safely install guidance into the exact target; set it as active project.
 - `#start` — begin or resume the active project's next task.
 - `#next` / `#proceed` — do the next appropriate task, verify, log, and checkpoint.
-- `#modify` — discuss proposed protocol changes; change shared rules only after approval.
+- `#modify` — discuss proposed protocol changes; change shared rules only after explicit maintainer authorization.
 - `#pause` — pause project work.
 - `#append` — capture missed durable knowledge.
-- `#sync-protocol owner/repo` — safely update protocol-managed files.
+- `#sync-protocol owner/repo` — synchronize protocol-managed files into a separately designated project repository only when authorized; never push to the protocol source repository as a side effect.
 - `#status owner/repo` — report verified status and blockers.
+
+## Protocol source write restriction
+
+The public `francis-h-francisco/agent-protocols` repository is read-only for agents consuming the protocol. They are users, not contributors. No edit, branch, commit, push, PR, or sync to that source repository is allowed unless the user explicitly identifies themselves as its maintainer and directly authorizes that specific protocol change. Command syntax does not grant permissions. If a change is advisable, propose it in chat without publishing it.
 
 ## Bootstrap output
 
