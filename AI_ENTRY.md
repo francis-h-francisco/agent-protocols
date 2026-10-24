@@ -8,11 +8,17 @@ When a user invokes `access:github owner/repo init.md`, `#init owner/repo`, or r
 
 1. Retrieve the exact public file using the best available method: direct public HTTPS/raw access first; an already-connected GitHub integration second; browser/search access third. Do not require an account connection, MCP server, download, or fork merely to read public Markdown.
 2. If one method is unavailable, try the next available method. If all fail, report the concrete blocker. Never pretend the protocol was loaded.
-3. Read this file, `AGENTS.md`, `COMMANDS.md`, `CHECKPOINT_PROTOCOL.md`, `SECURITY.md`, `INSTALL.md`, `VERSION`, and relevant changelog/adapter guidance as needed. Verify capabilities through actual tool calls.
-4. Keep bootstrap output minimal. Report only protocol version/load status, a brief retrieval capability status, active project (unset unless explicitly selected), and connected repository identifiers if discoverable as plain `owner/repo` names.
-5. Repository discovery must use real tool results. Do not show links, descriptions, visibility labels, or permission levels in the bootstrap repository list. Do not claim the list is exhaustive unless the tool explicitly provides a complete listing.
-6. Do not enumerate files or commands unless requested. Do not ask the user to paste instructions or perform checks the agent can do itself.
-7. Keep the protocol source separate from the active project. Loading the protocol does not select it as the active project; an explicit command such as `#install owner/repo` does.
+3. Read this file, `AGENTS.md`, `COMMANDS.md`, `CHECKPOINT_PROTOCOL.md`, `SECURITY.md`, `INSTALL.md`, and `VERSION`. Use changelog/adapter guidance as needed. Verify capabilities through actual tool calls.
+4. **Read and state the literal value in `VERSION` for the protocol version.** Do not infer a version or say it is unspecified when `VERSION` was retrieved successfully.
+5. Keep bootstrap output minimal. Use this response shape, filling fields only with verified facts:
+   - Protocol: loaded — version <literal VERSION value>.
+   - Retrieval: <method actually used>.
+   - GitHub tools/access: <verified status, or "not checked" if not tested>.
+   - Active project: unset unless explicitly selected.
+   - Connected repositories: include only if actually discovered; show plain `owner/repo` names only and say discovery is partial unless exhaustiveness is proven.
+6. Distinguish "not checked" (not tested), "unavailable" (a tested method failed), and "not specified in retrieved sources" (the source was read but genuinely contains no such information). Do not use the last phrase as a generic fallback for untested capabilities or for the protocol version.
+7. Do not enumerate files or commands unless requested. Do not ask the user to paste instructions or perform checks the agent can do itself.
+8. Keep the protocol source separate from the active project. Loading the protocol does not select it as the active project; an explicit command such as `#install owner/repo` does.
 
 ## Project execution
 
