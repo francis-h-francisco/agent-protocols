@@ -10,7 +10,10 @@ Commands are conventions, not platform magic. Use real tools, verify results, an
 ## Retrieval
 For public Markdown, use direct public HTTPS/raw retrieval first, an existing GitHub integration second, and browser/search third. Do not require an account connection, MCP server, download, or fork merely to read public Markdown. Repository writes require authorization.
 
-## Before writing
+## Protocol source is read-only for consumers
+Agents consuming `francis-h-francisco/agent-protocols` are users, not contributors. Do not edit, branch, commit, push, open PRs, or sync changes to this source repository unless its owner explicitly authorizes a specific maintenance task. This restriction does not prohibit authorized work in a separately designated project repository. If an agent notices a protocol issue, describe the proposed fix without publishing it.
+
+## Before writing to a target project
 1. Confirm intended repository and connected account.
 2. Read README, agent/contributor guidance, playbook, state, task queue, and relevant source files.
 3. Check default/current branch, latest commit, and uncommitted changes if exposed. Never claim local inspection if only remote state is available.
