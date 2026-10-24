@@ -1,5 +1,5 @@
 # Portable AI Project Continuity Protocol
-Version: 1.4.0
+Version: 1.4.1
 
 A provider-independent, GitHub-first workflow for preserving project continuity across AI assistants, models, and fresh chats.
 
@@ -22,6 +22,10 @@ The bootstrap should quietly read required rules, verify only capabilities it ac
 4. If none can retrieve it, state the specific limitation. Never claim it was loaded.
 
 No MCP server, account connection, manual download, or fork is required merely to read public Markdown. Writing to a repository still requires authorization.
+
+## Read-only source policy
+
+This repository is a maintained instruction source. Agents consuming it are users, not contributors. They must not edit files, create branches, commit, push, open PRs, or synchronize changes to this repository unless the owner explicitly authorizes a specific maintenance task. Protocol commands are not write authorization. If an agent finds an issue, it should describe the proposed fix to the user without publishing it. This behavioral policy should be backed by repository permission and branch-protection settings.
 
 ## Workflow
 
