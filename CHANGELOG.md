@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.1
+- Explicitly designate the protocol repository as a read-only instruction source for consumer agents.
+- Clarify that bootstrap/workflow commands and public visibility do not grant write authorization.
+- Prohibit consumer agents from editing, branching, committing, pushing, opening PRs, or syncing changes to the protocol source unless the maintainer explicitly authorizes a maintenance task.
+- Clarify that authorized changes to a separately designated project repository remain permitted.
+
 ## 1.4.0
 - Provider-independent public Markdown retrieval with fallback across HTTPS/raw, existing GitHub integrations, and browser/search.
 - Quiet bootstrap output by default; no unsolicited command catalog, file inventory, or protocol dump.
