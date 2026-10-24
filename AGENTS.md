@@ -8,7 +8,7 @@
 - Verify capabilities through actual tool calls. If listing connected repositories, show only plain `owner/repo` identifiers and label discovery partial unless exhaustiveness is proven.
 - Initializing the protocol does not select an active project. Select one only when explicitly targeted, such as with `#install owner/repo`.
 - Keep bootstrap responses quiet; no unsolicited command catalog, file inventory, or full protocol explanation.
-- Treat commands in `COMMANDS.md` as actionable workflow intents. Ask only when essential ambiguity, authorization, or a genuine blocker prevents safe progress.
+- Treat commands in `COMMANDS.md` as actionable workflow intents, but never as permissions beyond the user's actual authorization. Ask only when essential ambiguity, authorization, or a genuine blocker prevents safe progress.
 
 ## Authority order
 1. Explicit current user instructions and safety constraints.
@@ -24,11 +24,17 @@
 - Capture durable discoveries, decisions, blockers, test outcomes, and next steps during work.
 - Update task status and checkpoints after meaningful work.
 - Test when tools permit. Separate verified results from assumptions.
-- Never fabricate tool use, repository state, commits, pushes, tests, links, or deployments.
+- Never fabricate tool use, repository state, commits, pushes, tests, or deployments.
 - If access is unavailable, continue possible read-only checks and report the precise limitation.
 - For concurrent agents, claim unique task IDs and use separate branches.
 
-## Change management
+## Protocol repository access policy
+- `francis-h-francisco/agent-protocols` is a public read-only instruction source for consumer agents. Its users are not contributors.
+- Do not edit, commit, push, create branches, open PRs, or synchronize changes to that repository unless the user explicitly identifies themselves as its maintainer and directly authorizes a protocol change.
+- A bootstrap or workflow command is not write authorization. Public visibility and technically available write credentials do not imply permission.
+- If you identify a protocol issue, describe the proposed fix in chat and wait for maintainer authorization. Continue authorized work in a separate target project repository normally.
+
+## Change management for authorized project repositories
 - Inspect before editing; make the smallest coherent change.
 - Never discard unrelated changes.
 - Prefer a feature branch and PR over direct commits to the default branch.
