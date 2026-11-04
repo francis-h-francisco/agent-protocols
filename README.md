@@ -42,9 +42,9 @@ Projects adopting this protocol should keep two separate locations:
 - `.agent/PROJECT_PREFLIGHT.md` — project-specific pre-task instructions: required reading, scope, safety, approvals, and how to work.
 - `docs/agent-handoff/` — durable work records: current state, active task, decisions, implementation/audit reports, independent reviews, and templates.
 
-The root `AGENTS.md` should point agents to the preflight file. The preflight file should direct agents to the handoff records before starting or resuming work. The handoff directory records what happened; it is not a substitute for agent instructions.
+The root `AGENTS.md` should point agents to the preflight file. That preflight file tells agents to read the handoff records before starting or resuming work. The handoff directory records what happened; it is not a substitute for agent instructions.
 
-Use the canonical templates in `templates/PROJECT_PREFLIGHT.md` and `templates/agent-handoff/`. Customize project facts and constraints; never copy another project's private data or assumptions. Reports must distinguish SUBMITTED agent claims from independently verified and ACCEPTED outcomes.
+Use the canonical templates in `templates/PROJECT_PREFLIGHT.md`, `templates/PROJECT_AGENTS_SECTION.md`, and `templates/agent-handoff/`. Customize project facts and constraints; never copy another project's private data or assumptions. Reports must distinguish SUBMITTED agent claims from independently verified and ACCEPTED outcomes.
 
 ## Core principle
 
@@ -60,6 +60,7 @@ Repository files—not chat history—are the durable source of truth. Inspect c
 - `CHECKPOINT_PROTOCOL.md`: durable checkpoints and handoffs.
 - `SECURITY.md`: privacy and safety rules.
 - `templates/PROJECT_PREFLIGHT.md`: project preflight template to install as `.agent/PROJECT_PREFLIGHT.md`.
+- `templates/PROJECT_AGENTS_SECTION.md`: snippet to integrate into a project's root `AGENTS.md`.
 - `templates/agent-handoff/`: project state, active task, decisions, and report/review templates.
 - `adapters/`: environment adaptation guidance.
 
