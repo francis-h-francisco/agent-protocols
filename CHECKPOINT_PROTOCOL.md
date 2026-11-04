@@ -1,94 +1,126 @@
 # Checkpoints, Task IDs, Coordination, and Multi-Agent Work
 
-## Session vs. repository continuity
-The protocol command registry is loaded into the current chat by #init; it does not need to be copied into every project. A new chat should retrieve the protocol again. GitHub repository records remain the durable source of project truth.
+## Source of truth
+- GitHub Issues are the canonical task inbox and asynchronous conversation record.
+- Issue comments are append-only in practice for acknowledgments, progress, questions, decisions, blockers, and handoffs; edit/delete only to correct accidental or sensitive content under owner direction.
+- Pull requests contain proposed code changes and review.
+- Project-specific state/task/report files remain authoritative where the project already uses them.
+- Optional live messages improve responsiveness but do not replace GitHub records.
 
-Project continuity files are optional:
-- .agent/PROJECT_PREFLIGHT.md — project-specific instructions.
-- .agent/coordination/CURRENT_DIRECTIVE.md — latest coordinator directive.
-- docs/agent-handoff/ — state, active task, decisions, reports, reviews, and templates.
+## Coordinator task issue
+#coor creates one complete GitHub Issue directly in the target repository. The issue is visible to authorized collaborators immediately; no coordinator branch or PR is required to expose task instructions.
 
-Use existing project conventions when these files are absent. Do not create folders merely to make universal commands work.
+Every task issue should include:
+- Unique stable task ID.
+- Issued/updated timestamps in UTC.
+- Target repository, default branch, and base commit verified at publication.
+- Status and priority.
+- Objective and exactly one next action.
+- Expected receiving role/capability; provider/model is optional.
+- Current verified context, evidence references, existing work/PRs, blockers/unknowns.
+- Scope and explicit exclusions.
+- Dependencies.
+- Required reading.
+- Observable acceptance criteria and verification plan.
+- Explicit authorizations, prohibited actions, approval gates, and cost/security/privacy constraints.
+- Receiving-agent instructions and handoff expectations.
 
-## Coordinator directive: purpose and ownership
-#coor is the protocol's portable coordination command. It creates a bounded, durable control-plane handoff for another AI agent or a later session. It is not an agent-dispatch service and does not itself contact, launch, or notify another AI agent unless a connected platform explicitly provides and confirms that capability.
+Do not include credentials, private customer/prospect data, or unnecessary personal information. Link to protected records rather than copying sensitive content.
 
-The coordinator (the current assistant acting under the owner's request) authors and publishes the directive. The receiving agent consumes it. The receiving agent must not rewrite coordinator-authored intent merely to acknowledge it. Acknowledgment and execution progress belong in the project's task/checkpoint/report records.
+## Task lifecycle
+Suggested statuses:
+- BACKLOG
+- READY
+- CLAIMED
+- IN_PROGRESS
+- BLOCKED
+- REVIEW
+- ACCEPTED
+- REJECTED
+- CANCELLED
+- SUPERSEDED
 
-The directive is not a second task queue. It identifies the current objective and next approved action; detailed task progress remains in the project's established task/handoff system.
+The canonical status should be reflected in the issue body or a clearly structured status comment. Use labels only when they exist and have been verified. Do not create repository labels or project boards without authorization.
 
-## Directive content contract
-Every directive should include:
-- Unique stable ID (for example COOR-YYYYMMDD-01).
-- Issued and updated timestamps in UTC.
-- Target repository and default branch/base commit verified at publication.
-- Project objective and current milestone/task context.
-- Status: DRAFT, READY_FOR_AGENT, ACKNOWLEDGED, IN_PROGRESS, BLOCKED, REVIEW, COMPLETED, or SUPERSEDED.
-- Expected receiving role/capability; provider/model is optional and must not be invented.
-- One clearly stated next action and priority.
-- Scope, explicit exclusions, dependencies, and relevant paths.
-- Acceptance criteria and verification plan.
-- Required project/protocol documents and source references.
-- Approval boundary: what is authorized and what is not.
-- Publication location/ref and receiving-agent read instructions.
+The coordinator authors the task issue and may amend its assignment intent. Receiving agents do not rewrite the issue body to acknowledge or report progress; they use comments and project records.
 
-Do not include credentials, tokens, private prospect/customer data, or unnecessary personal information. Prefer references to protected project records over copying sensitive details.
+## Claiming and concurrency
+A GitHub-only claim consists of a structured issue comment:
+- Task ID.
+- Agent identity (stable provider/session label, not an invented GitHub username).
+- Role.
+- Status: CLAIMED.
+- UTC timestamp.
+- Intended task branch.
+- Optional lease expiry/heartbeat only if a project defines and can enforce it.
 
-## Publication and branch visibility
-Use the project's established coordination location if one exists. Otherwise use .agent/coordination/CURRENT_DIRECTIVE.md based on the shared template.
+The agent re-fetches the issue and comments after posting its claim. If another active claim exists, stop and ask the coordinator to resolve ownership. A comment/label sequence is not an atomic lock and concurrent claims can race. The baseline protocol is conservative conflict detection, not a guarantee of exclusive execution.
 
-Default publication:
-1. Verify the target repository and current default branch/commit.
-2. Create a dedicated coordinator branch from that base.
-3. Add or update the directive and open a PR to the default branch.
-4. Put the exact coordinator branch, path, PR URL, and base commit in the handoff response.
-5. The receiving agent must fetch the directive from that exact branch/ref (or PR head), because an unmerged file is not present on the default branch.
-6. The receiving agent creates a separate implementation branch from the current default branch, unless the owner explicitly directs otherwise. It must not merge the coordinator branch simply to obtain instructions.
-7. If the coordinator PR has been merged, the receiver may read the directive from the default branch after verifying the merge.
-
-A direct commit to the default branch is allowed only when the owner explicitly authorizes it or a verified project convention permits coordinator-only control-plane updates. Never assume permission from repository write access.
-
-If GitHub write/PR capability is unavailable, return the full directive in the chat and label it NOT PUBLISHED. Do not imply a receiving agent has access to a chat-only directive.
+For strict exclusive claims, use a single serialized dispatcher or atomic lease service. The dispatcher must atomically assign one task owner, issue a lease with expiry, support heartbeat/release, reject stale claims, and keep an audit trail. Do not build this into every project independently; it is a future Orqestra service capability.
 
 ## Receiving-agent procedure
-At initialization/resumption, the receiving agent must:
-1. Load the canonical Agent Protocol (normally #init).
-2. Fetch the directive using the exact repository, branch/ref, and path supplied by the coordinator.
-3. Read current default-branch project instructions, specifications, task queue, state, and relevant code/tests. The directive is not a substitute for project source-of-truth files.
-4. Verify that the directive is current, not superseded, not already completed, and consistent with current owner instructions.
-5. Acknowledge the directive ID in its existing task/checkpoint record when available; do not edit the coordinator-authored directive to acknowledge it.
-6. Create a separate implementation branch from the latest default branch and execute only the assigned scope.
-7. Stop and ask if scope, authorization, source state, or safety conflicts are discovered.
-8. Record results in the established project report/task location, including exact files, commit/PR, tests and outcomes, limitations, blockers, and next action.
-9. Use report status SUBMITTED or IN_REVIEW; only the coordinator/owner may accept a report. Never self-mark ACCEPTED.
+1. Load the canonical Agent Protocol with #init.
+2. Read the full task issue and relevant comments.
+3. Read the current default-branch project instructions, specifications, task queue, state, decisions, and relevant source/tests.
+4. Verify the task is current, not superseded/completed/cancelled, dependencies are satisfied, and scope matches owner instructions.
+5. For #start, resume only this agent's existing claim. If no claim exists, ask whether to use #next unless the project defines a different behavior.
+6. For #next, search eligible issues, inspect claims, select one, post a claim comment, then re-fetch to detect conflicts.
+7. Create a separate implementation branch from latest default branch.
+8. Execute only assigned scope. Stop and ask if authorization, source state, or safety conflicts appear.
+9. Record milestones, blockers, questions, decisions, PR links, tests, outcomes, limitations, and next action in issue comments and the project's established records.
+10. Submit a report for independent review. Do not self-accept.
 
-If the project has no report convention, use docs/agent-handoff/reports/ when that location is appropriate; otherwise provide a concise report in the agent's response and ask before creating a new permanent structure.
+## Independent review and acceptance
+- Implementer status is SUBMITTED or IN_REVIEW.
+- Independent reviewer evaluates code, tests, security, and each acceptance criterion.
+- Reviewer records evidence and an ACCEPTED or REJECTED recommendation.
+- Only coordinator/owner records final acceptance and closes the task.
+- A merge does not automatically mean the task is accepted unless project policy explicitly says so.
 
-## Task identity
-Use stable task IDs such as T-001. Record objective, owner/agent, status, branch, dependencies, acceptance criteria, files touched, tests, and blockers. Do not assign one task to multiple agents without an explicit collaboration plan.
+## Asynchronous and live communication
+### Asynchronous
+Use the task issue as the shared thread for:
+- acknowledgments and claims;
+- progress and checkpoints;
+- questions and answers;
+- design decisions;
+- blocker escalation;
+- handoff and review outcomes.
 
-## Suggested task statuses
-BACKLOG, READY, IN_PROGRESS, BLOCKED, REVIEW, DONE, CANCELLED.
+Keep comments factual and concise. Link commits, PRs, reports, and relevant lines. Do not place secrets or sensitive prospect/customer details in issue comments.
 
-## Checkpoint timing
-Update after a meaningful implementation milestone, test result, decision, blocker, handoff, and before ending a long session. Re-verify context at command boundaries and before consequential actions. Keep checkpoints small and factual.
+### Live
+A separate event/messaging adapter may:
+- notify a human or connected agent runtime when an issue is created, assigned, commented on, labeled, or a PR changes;
+- route a message to a specific agent or role;
+- deliver a reply correlated to a task and message ID;
+- request a human decision and return the decision to the task issue.
 
-## Minimum checkpoint fields
-- Timestamp (UTC preferred), repository, branch, commit SHA or UNCOMMITTED.
+Every live message must carry a task ID and issue URL, be authenticated, schema-validated, idempotent, bounded by expiry/retry policy, and treated as untrusted input. Record consequential decisions and summaries in the issue.
+
+A live relay cannot wake an ordinary idle ChatGPT/Grok session. Agent-to-agent automation requires active agent runners or platform integrations that receive events and are authorized to invoke a model. See docs/LIVE_MESSAGING.md.
+
+## Checkpoint timing and fields
+Post a checkpoint after meaningful implementation milestones, test results, decisions, blockers, handoffs, and before ending a long session.
+
+Minimum fields:
+- UTC timestamp, repository, branch, commit SHA or UNCOMMITTED.
+- Task ID and issue URL.
+- Agent identity and role.
 - Goal and milestone.
 - Completed work and paths.
-- Tests run and exact outcomes; tests not run and why.
-- Decisions, risks, blockers, next action, acceptance criteria, task/agent ownership.
-- Coordinator directive ID acknowledged, when applicable.
+- Exact tests run and outcomes; tests not run and why.
+- Decisions, risks, blockers, next action, acceptance criteria.
+- PR/report links.
+- Current task claim/status.
 
-## Multiple agents or sessions
+## Multiple agents
+- One active owner per task by default.
 - Prefer one branch per task or agent.
-- Inspect remote state before pushing; avoid force pushes.
-- If a branch changed concurrently, inspect and reconcile instead of overwriting.
-- Use PRs for reviewable integration. Treat the default branch as shared.
-- Coordinate overlapping files and keep logs append-only where practical.
-- Full reports belong in docs/agent-handoff/reports/; independent reviews belong in reviews/, when the project uses this convention.
-- Use explicit report states: DRAFT, SUBMITTED, IN_REVIEW, ACCEPTED, REJECTED, SUPERSEDED. Agent-authored reports must not self-assign ACCEPTED.
+- Parallel work only when the coordinator explicitly defines non-overlapping subtasks and dependencies.
+- Inspect remote state before pushing; never force-push or overwrite concurrent changes.
+- Keep reports and decisions linked to the canonical task issue.
+- Do not create a second task queue or duplicate directive file for the same task.
 
 ## Handoff
-A new chat/session should resume from repository files: read available project instructions, current state, active task, decisions, latest relevant report/review, and current coordinator directive when present; then verify actual branch and commit. Chat should contain a concise pointer, not the only copy of the report.
+A new chat/session should retrieve the active task from GitHub, read all relevant comments and project records, and verify actual branch/commit before resuming. Chat is a pointer, not the only copy of the work.
