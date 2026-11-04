@@ -1,80 +1,92 @@
 # Conversational Commands
 
-Commands express workflow intent, not platform permissions. This file is the universal command registry. After #init, the agent should understand these commands for the rest of the current chat without repeated explanations.
+Commands express workflow intent, not platform permissions. This file is the universal command registry.
 
 ## Initialization and project selection
-- #init — initialize or restore the current chat session from the canonical protocol source. Load the command registry and rules into working context, verify retrieval, and respond ready. Does not select a project or install project files.
-- #init owner/repo — backward-compatible explicit protocol-source form when the user intends that repository to be the protocol source. Do not confuse it with project selection.
-- #project owner/repo — verify and select the active project for this session. Do not install files.
-- #help — show command help when asked.
+- `#init` — initialize or restore the current chat from the canonical protocol source.
+- `#init owner/repo` — use an explicitly supplied protocol source; do not confuse this with project selection.
+- `#project owner/repo` — verify and select the active project.
+- `#help` — show command help when asked.
 
 ## Project commands
-- #install owner/repo — optional installation/merge of project-local preflight and continuity templates into the exact target repository. Set it as the active project only after verification. This is not required to use the protocol or its commands.
-- #coor [owner/repo] [task/context] — coordinate work for the explicit or active project. Verify project state, interpret the user's goal, produce a bounded agent-ready directive, and publish it to GitHub using the project's existing coordination convention or the portable fallback described below. Report the exact directive location/ref and handoff instructions. #coor does not execute the implementation task.
-- #start — start or resume the selected project's next clearly authorized task after verifying its current state and latest coordinator directive.
-- #next / #proceed — execute the next appropriate approved task. Read the latest coordinator directive, inspect task state, implement, verify, record, and report.
-- #modify — modify the selected project within the user's requested scope. For shared protocol changes, require explicit maintainer authorization.
-- #pause — checkpoint meaningful progress, record blockers and next action where project records exist, then stop execution.
-- #append — add newly supplied durable knowledge to the appropriate project record; do not invent facts.
-- #status [owner/repo] — report verified repository, task, PR, CI, directive, and blocker status. If no repository is supplied or active, ask which one.
-- #sync-protocol owner/repo — update protocol-managed files in the named project only when authorized. Preserve project state and customizations. Never modify the protocol source as a side effect.
+- `#install owner/repo` — optionally install project-specific preflight and continuity guidance.
+- `#coor [owner/repo] [task/context]` — inspect the project, define one bounded assignment, and create its canonical GitHub Issue directly in the target repository.
+- `#start` — resume this agent's existing claimed task after re-reading its issue, comments, project instructions, and current state. It does not automatically claim a new task.
+- `#next` / `#proceed` — discover and claim one eligible task, then execute it.
+- `#modify` — modify the selected project within the user's requested scope.
+- `#pause` — checkpoint progress and post a factual update to the task issue/project record.
+- `#append` — add supplied durable knowledge to the appropriate project record.
+- `#status [owner/repo]` — report verified project, task, PR, CI, communication, and blocker status.
+- `#sync-protocol owner/repo` — update protocol-managed files in the named project only when authorized.
 
 ## Routing rules
-1. If not initialized, attempt canonical bootstrap automatically when possible. Continue the requested command if its meaning, target, and authorization are clear.
-2. Use an explicit repository argument for that command. Otherwise use the active project in this chat.
-3. If a repository is required but unavailable, ask one concise question. Never infer the target from unrelated context or account ownership.
-4. A command may retrieve project files as needed; it must not require the user to paste instructions already accessible through GitHub.
-5. If a project lacks .agent/PROJECT_PREFLIGHT.md or docs/agent-handoff/, continue using verified repository guidance. These are optional conventions, not prerequisites.
-6. Commands do not override the user's explicit restrictions, security rules, or approval boundaries.
+1. If not initialized, attempt canonical bootstrap when possible.
+2. An explicit repository argument applies to that command; otherwise use the active project.
+3. If the repository is unknown, ask; never infer from account ownership or unrelated chat history.
+4. Commands retrieve instructions from GitHub; users should not need to paste accessible project instructions.
+5. Project-specific preflight and handoff files are optional unless that project makes them mandatory.
+6. Commands never override explicit user restrictions, security rules, or approval boundaries.
 
 ## #coor execution contract
 
-### 1. Resolve and inspect
-- Resolve the target repository from the explicit argument or active project. If neither is established, ask which repository; do not guess.
-- Read root instructions (AGENTS.md, README, contributing/security guidance), project specifications, current-state and task records, and any existing coordinator directive.
-- Verify default branch, latest commit, open task/PR state, relevant CI, and known blockers as tools permit. Inspect the actual files relevant to the proposed task; do not rely only on old chat summaries.
-- Identify repository boundaries and the appropriate agent role/capability. Do not assume a particular model/provider or claim that another agent was contacted.
+### 1. Inspect
+- Resolve the exact target repository.
+- Read root instructions, project specifications, task/state/decision records, current coordinator tasks, open PRs, and relevant CI.
+- Verify default branch and latest commit.
+- Identify the next useful task, dependencies, risks, and expected role. Separate verified facts from inference.
 
 ### 2. Plan and bound
-- Convert the user's goal into one actionable directive with a unique stable ID (for example COOR-YYYYMMDD-01).
-- State the objective, one next action, priority, expected role, scope, out-of-scope items, dependencies, acceptance criteria, verification plan, source references, and known unknowns.
-- Separate facts verified from inference and proposed decisions.
-- State approvals explicitly. A #coor directive may authorize only work the user has authorized. It does not grant permission for spending, external outreach, deployment, production data changes, destructive actions, secret/permission changes, or merging unless the user separately approves them.
-- If the goal is ambiguous in a way that materially changes the task, ask one concise question rather than inventing requirements.
+Create one unique stable task ID (for example `COOR-YYYYMMDD-01`) and one complete issue body containing:
+- status, priority, expected receiving role, objective, and one next action;
+- target repository, default branch, base commit, relevant paths and evidence refs;
+- in-scope and out-of-scope work;
+- dependencies and existing task/PR relationships;
+- observable acceptance criteria and verification plan;
+- explicit approvals, exclusions, security/privacy/cost constraints;
+- required reading and receiving-agent procedure.
 
-### 3. Publish for the receiving agent
-- Prefer the project's existing coordinator/task/handoff location and format when one is established. Do not create a competing task queue.
-- Otherwise use `.agent/coordination/CURRENT_DIRECTIVE.md` based on `templates/CURRENT_DIRECTIVE.md`.
-- The directive is a control-plane handoff, not a duplicate implementation plan or progress log. Keep detailed task progress in the project's established task/report records.
-- Publish the directive to a reviewable branch and open a PR by default. Include the exact repository, branch, file path, PR URL, and base commit in the response. Do not claim the receiving agent can read an unmerged directive from the default branch: tell it to fetch the named branch/PR ref and read the exact file.
-- If the project has an established direct-to-main convention or the user explicitly authorizes direct publication, verify that convention/authorization before writing. If GitHub write access is unavailable, provide the complete directive in chat and state that it was not published.
-- Never place credentials, private customer/prospect data, or unnecessary personal information in a directive.
+Do not create duplicate task issues for the same assignment. Search existing open issues and project task records first. Do not include secrets or unnecessary personal/prospect data.
+
+### 3. Publish the canonical task
+- Create the GitHub Issue directly in the target repository so authorized collaborators can read it immediately without a coordinator branch or PR.
+- Use a clear title with the task ID and concise objective.
+- Apply task/priority/status labels only if they already exist and are appropriate. Do not silently create labels, milestones, projects, or workflows unless authorized.
+- Verify the created issue URL, number, body, and state by reading it back.
+- The issue body is coordinator-authored assignment intent. Progress, questions, decisions, acknowledgments, and handoffs are appended as comments.
+- If issue creation is unavailable, provide the complete directive in chat and state NOT PUBLISHED. Never imply an agent can see chat-only instructions.
 
 ### 4. Receiving-agent handoff
-The directive must tell the receiving agent to:
-1. Initialize the canonical Agent Protocol with #init (or load the same source instructions if its interface cannot execute chat commands).
-2. Read the directive from the exact branch/ref supplied by the coordinator, plus the project's current default-branch instructions and relevant task records.
-3. Verify current branch/commit and check whether the directive is superseded, blocked, or already completed before acting.
-4. Acknowledge the directive ID in its task/checkpoint record without editing the coordinator-authored directive merely to acknowledge it.
-5. Create its own task branch from the current project default branch unless the directive explicitly specifies a safe alternative.
-6. Execute only the assigned scope; stop and ask if the directive conflicts with owner instructions, current project state, or safety rules.
-7. Report results in the project's established report location, with files changed, commit/PR, exact tests and outcomes, limitations, blockers, and next action. Agent-authored reports must not mark themselves ACCEPTED.
+The receiving agent must:
+1. Load the canonical protocol using #init or retrieve its public source.
+2. Read the complete task issue and all relevant comments from the target repository.
+3. Read current project instructions, task/state records, and relevant source.
+4. Verify the task is current, not superseded/completed/cancelled, dependencies are satisfied, and authorization is adequate.
+5. Claim/acknowledge the task with agent identity, role, UTC timestamp, and intended implementation branch; re-fetch comments to detect conflicting claims.
+6. Create a separate implementation branch from the latest default branch.
+7. Execute only the approved scope and stop on conflicts or missing approvals.
+8. Post meaningful progress, blockers, questions, decisions, PR link, exact tests/results, limitations, and next action as issue comments and project records.
+9. Mark its report SUBMITTED or IN_REVIEW; never self-mark ACCEPTED.
 
-### 5. Report and maintain
-- Report verified repository identity/default branch/latest commit, directive ID and status, assigned role, objective/next action, acceptance criteria, publication branch/path/PR, and blockers.
-- A PR being opened is publication for review, not proof it was merged or that another agent received/read it.
-- Do not claim cross-chat persistence, automatic agent dispatch, or a notification unless the platform/tool verifies it.
-- #coor prepares and publishes coordination; #start/#next/#proceed perform the implementation task after authorization and fresh verification.
+### 5. Claim and concurrency rules
+- Search for an existing valid claim before taking a task.
+- Use a stable agent identity string, task ID, UTC timestamp, and intended branch in claim comments.
+- A claim is advisory in the GitHub-only baseline. Re-fetch the issue and comments after claiming.
+- If claims conflict, ownership is unclear, or another agent has an active claim, stop and ask the coordinator to resolve it.
+- Do not assume GitHub labels/comments provide atomic locking. A strict single-owner lease requires a serialized dispatcher or atomic lease service.
+- Do not claim multiple tasks concurrently unless the coordinator explicitly authorizes parallel work and scopes do not overlap.
 
-## Coordinator directive lifecycle
-The coordinator directive is a control-plane instruction, not a duplicate task queue. Keep task details and execution progress in the project's existing task/handoff system. A directive should identify a unique ID, issued/updated time (UTC), target repository, objective, next action, priority, assigned role, scope, acceptance criteria, constraints/approvals, references, and status.
+### 6. Completion and acceptance
+- Implementer posts a completion summary and opens/links a PR.
+- Independent reviewer checks acceptance criteria, code, tests, and evidence; records ACCEPTED or REJECTED recommendation.
+- Only coordinator/owner records final acceptance and closes the issue.
+- Keep issue open while in review or blocked. A PR merge is not by itself proof of task acceptance unless project policy says so.
 
-The coordinator authors/updates the directive. The executing agent reads it at initialization/resume and before selecting the next task; it records the acknowledged directive ID in its normal task/checkpoint record when available. Do not let the agent overwrite coordinator-authored intent while acknowledging it. If the directive conflicts with explicit user instructions or safety policy, stop and ask.
+## Asynchronous and live communication
+- GitHub Issue comments are the durable asynchronous communication record.
+- Optional live transport may notify or route short messages, but it must link back to the canonical issue and record consequential decisions there.
+- No command may claim a notification, live delivery, or agent dispatch unless a connected integration confirms it.
+- An idle chat session cannot be assumed to receive events. Live execution requires an active agent runner or event-capable platform integration.
 
-#coor reports the repository, directive summary, branch/PR or verified publication result, and blockers. It does not authorize external outreach, spending, deployment, destructive changes, merging, or execution of the application task.
+## Coordinator authority and safety
+#coor creates and publishes an assignment; it does not itself execute the implementation task. It cannot authorize spending, external outreach, deployment, production data changes, destructive actions, secret/permission changes, or merge unless the owner explicitly approves them.
 
-## Bootstrap response
-Keep #init concise: protocol ready/version, command registry loaded, verified retrieval/access status, active project or not selected, ready. Do not dump this command list unless asked.
-
-## Protocol source write restriction
-The public francis-h-francisco/agent-protocols repository is read-only for consumer agents. No edit, branch, commit, push, PR, or sync is allowed unless the user explicitly identifies themselves as its maintainer and directly authorizes that specific protocol change. Command syntax does not grant permissions.
