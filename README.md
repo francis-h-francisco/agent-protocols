@@ -1,7 +1,7 @@
 # Portable AI Project Continuity Protocol
-Version: 1.5.0
+Version: 1.6.0
 
-A provider-independent, GitHub-first protocol for consistent command handling and project continuity across AI assistants, models, and standalone chats.
+A provider-independent, GitHub-first protocol for consistent command handling, project continuity, and human-directed multi-agent coordination across AI assistants, models, and standalone chats.
 
 ## Quick start
 In any compatible chat, send:
@@ -23,14 +23,24 @@ Select a project with #project owner/repo, or provide a repository directly to a
 ## Project commands
 - #project owner/repo — select the active repository for this chat.
 - #install owner/repo — optionally install project-specific guidance and durable continuity records.
-- #coor — publish/update the coordinator directive for the active project.
+- #coor [owner/repo] [task/context] — create and publish a bounded, agent-ready coordinator directive for the target project.
+- #start — resume the next authorized task after reading the latest directive.
 - #next / #proceed — execute the next approved task after checking the latest directive and project state.
-- #status — report verified project status.
+- #status — report verified project and directive status.
 
-See COMMANDS.md for the full command registry.
+See COMMANDS.md for the full command registry and #coor execution contract.
+
+## Portable coordination
+#coor is part of the universal protocol. It can be used with any accessible project repository; it is not tied to a Pivory repository, a particular agent provider, or project-local installation.
+
+The coordinator inspects project instructions and current state, prepares a bounded directive, and publishes it using the project's existing convention or the portable fallback `.agent/coordination/CURRENT_DIRECTIVE.md`. Publication defaults to a reviewable branch and PR. The handoff must include the exact branch/ref, file path, and PR URL so another agent can retrieve the directive before it is merged.
+
+The receiving agent reads the directive from the exact ref, verifies it against current project state, acknowledges its ID in its own task/checkpoint record, and creates a separate implementation branch from the latest default branch. It reports results in the project's established handoff system.
+
+#coor prepares and publishes instructions; it does not automatically launch or notify another agent. Actual agent dispatch requires a separate platform integration and verified action.
 
 ## Optional project continuity files
-Projects may adopt .agent/PROJECT_PREFLIGHT.md for project-specific pre-task instructions; .agent/coordination/CURRENT_DIRECTIVE.md for the coordinator's latest control-plane directive; and docs/agent-handoff/ for durable state, active task, decisions, reports, and reviews.
+Projects may adopt .agent/PROJECT_PREFLIGHT.md for project-specific instructions; .agent/coordination/CURRENT_DIRECTIVE.md for the latest coordinator directive; and docs/agent-handoff/ for durable state, active task, decisions, reports, and reviews.
 
 These are optional. Their absence does not prevent an agent from initializing, recognizing commands, or working from existing repository documentation. Create them only when requested or when durable coordination/handoff genuinely requires them.
 
