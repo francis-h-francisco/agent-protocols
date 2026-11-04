@@ -35,7 +35,7 @@ When a user selects or installs a project, inspect whether it has `.agent/PROJEC
 - The root `AGENTS.md` should explicitly point to the preflight file. The preflight file should point to the handoff records.
 - If either location is missing, propose/install it using the canonical templates in this protocol when installation is authorized. Preserve existing project instructions and records; do not overwrite customized files.
 - Verify current branch, commit, PR, and CI status. Treat old records as historical evidence, not live state.
-- Put full reports in `docs/agent-handoff/reports/`, independent reviews in `reviews/`, and link them from PRs. Update current state and active task after meaningful work.
+- Put full reports in `docs/agent-handoff/reports/`, independent reviews in `docs/agent-handoff/reviews/`, and link them from PRs. Update current state and active task after meaningful work.
 - Mark agent-authored reports SUBMITTED or IN_REVIEW. Only an authorized owner/reviewer may mark work ACCEPTED.
 
 ## Project execution
