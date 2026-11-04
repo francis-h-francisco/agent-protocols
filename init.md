@@ -1,27 +1,32 @@
 # Init
 
-Universal bootstrap trigger:
+Universal session bootstrap:
 
-`access:github owner/repo init.md`
+`#init`
 
-Interpret this as: retrieve `init.md` from the specified repository and follow its instructions before unrelated work. Here, `owner/repo` identifies the protocol source; do not assume it is the active project.
+Canonical protocol source: `francis-h-francisco/agent-protocols`.
 
-Use the best available retrieval method: direct public HTTPS/raw access first, an already-connected GitHub integration second, and browser/search access third. Do not require an account connection, MCP server, download, or fork merely to read public Markdown. If no method works, report the exact blocker; never pretend the protocol was loaded.
+When the user sends `#init` without an argument, retrieve this repository's current `init.md`, then read `VERSION`, `AI_ENTRY.md`, `AGENTS.md`, and `COMMANDS.md`. Follow the session bootstrap in `AI_ENTRY.md` before unrelated work. If the user supplies an explicit protocol source, use that source instead and verify it is the intended protocol.
 
-Read `VERSION` and `AI_ENTRY.md`, `AGENTS.md`, and `COMMANDS.md`, then follow the concise bootstrap sequence and relevant core rules.
+Use public HTTPS/raw access first, an already-connected GitHub integration second, and browser/search third. Do not require an account connection, MCP server, download, or fork merely to read public Markdown. If no method works, report the exact blocker; never pretend the protocol was loaded.
+
+## Session behavior
+
+A successful initialization loads the universal command registry and operating rules into the current chat's working context. Retain and use them throughout this conversation; do not make the user repeat command definitions during the same session. A new chat is a new context: `#init` retrieves the latest protocol again. Never claim that chat memory persists across separate chats unless the platform explicitly verifies that capability.
+
+Initialization does not require installing project instructions, creating project folders, or selecting a project. Project-specific instructions are retrieved from GitHub only when a command needs them.
 
 ## Read-only protocol source
 
-This repository is a maintained instruction source for agents to consume, not a project workspace for protocol users. Treat `francis-h-francisco/agent-protocols` as read-only unless the user explicitly identifies themselves as its maintainer and directly requests a protocol change. Do not edit, commit, push, open a PR, create a branch, or synchronize changes to this repository merely because a command or task mentions the protocol. Do not interpret `access:github`, `#init`, `#next`, or other protocol commands as write authorization. Make changes in the user's separately designated project repository when authorized.
-
-If an agent notices a protocol issue, explain the suggested change in the conversation; do not publish it. Public visibility is not permission to write. Technical write access, if present, does not override this policy.
+This repository is the maintained instruction source. Consumer agents must not edit, commit, push, open a PR, or synchronize changes here unless the user explicitly identifies themselves as its maintainer and directly authorizes a specific protocol maintenance task. A bootstrap or workflow command is not write authorization. Technical write access and public visibility do not override this rule.
 
 ## Required bootstrap response
 
-After successfully retrieving and reading `VERSION`, state its literal value as the protocol version. Do not say the version is unspecified if the file was retrieved. If a capability was not tested, say "not checked" rather than "not specified in retrieved sources." Keep output to a few concise lines:
-- Protocol: loaded — version <literal value from VERSION>.
-- Retrieval: <method actually used>.
-- GitHub tools/access: <verified status, or not checked>.
-- Active project: unset unless the user explicitly selected one.
+After successful retrieval, return a concise readiness response:
+- Agent Protocol ready — version <literal value from VERSION>.
+- Session command registry: loaded.
+- Retrieval/access: <verified method and capability status>.
+- Active project: <verified owner/repo or not selected>.
+- Ready.
 
-Do not invent a version, access status, connected repository list, or successful tool check. If `VERSION` could not be retrieved, state that exact limitation.
+Do not enumerate files or commands unless asked. Do not invent a version, access status, active project, or successful tool check. If a capability was not tested, say "not checked". If retrieval failed, report the blocker and do not claim readiness.

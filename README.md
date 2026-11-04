@@ -1,69 +1,64 @@
 # Portable AI Project Continuity Protocol
-Version: 1.4.2
+Version: 1.5.0
 
-A provider-independent, GitHub-first workflow for preserving project continuity across AI assistants, models, and fresh chats.
+A provider-independent, GitHub-first protocol for consistent command handling and project continuity across AI assistants, models, and standalone chats.
 
 ## Quick start
+In any compatible chat, send:
 
-Use the short trigger with this repository:
+#init
 
-`access:github francis-h-francisco/agent-protocols init.md`
+The agent retrieves this repository's current protocol, loads the universal command registry into the current chat context, and returns a concise ready status. Use #init again in every new chat because working memory is not guaranteed to carry across chats.
 
-If the agent does not understand the shorthand, ask it to open the root [init.md](init.md) or this public URL:
-https://raw.githubusercontent.com/francis-h-francisco/agent-protocols/main/init.md
+Select a project with #project owner/repo, or provide a repository directly to a command. No project-local installation is needed for basic command use.
 
-The bootstrap should quietly read required rules, verify only capabilities it actually has, and return a compact status. It must not dump the protocol, enumerate files, or list commands unless asked.
+## Session-first design
+- Universal command definitions live in this shared repository, not in every project.
+- A successful #init loads command semantics and safety rules for the current chat session.
+- The agent should not ask the user to repeat command definitions during that session.
+- A fresh chat retrieves the latest protocol again; cross-chat memory is not assumed.
+- If context is missing or uncertain, the agent re-fetches relevant protocol and project records before consequential action.
+- The agent cannot continuously poll while idle and must not claim perfect detection of silent context degradation.
+
+## Project commands
+- #project owner/repo — select the active repository for this chat.
+- #install owner/repo — optionally install project-specific guidance and durable continuity records.
+- #coor — publish/update the coordinator directive for the active project.
+- #next / #proceed — execute the next approved task after checking the latest directive and project state.
+- #status — report verified project status.
+
+See COMMANDS.md for the full command registry.
+
+## Optional project continuity files
+Projects may adopt .agent/PROJECT_PREFLIGHT.md for project-specific pre-task instructions; .agent/coordination/CURRENT_DIRECTIVE.md for the coordinator's latest control-plane directive; and docs/agent-handoff/ for durable state, active task, decisions, reports, and reviews.
+
+These are optional. Their absence does not prevent an agent from initializing, recognizing commands, or working from existing repository documentation. Create them only when requested or when durable coordination/handoff genuinely requires them.
+
+The coordinator directive is not a second task queue. It states the coordinator's current objective and next approved action; execution details remain in the project's established task records.
 
 ## Retrieval fallback
-
 1. Fetch public HTTPS/raw content directly when supported.
 2. Otherwise use an already-connected GitHub integration.
 3. Otherwise use browser/search access to open the exact public file.
 4. If none can retrieve it, state the specific limitation. Never claim it was loaded.
 
-No MCP server, account connection, manual download, or fork is required merely to read public Markdown. Writing to a repository still requires authorization.
+No MCP server, account connection, manual download, or fork is required merely to read public Markdown. Writing to a repository requires authorization.
 
 ## Read-only source policy
-
-This repository is a maintained instruction source. Agents consuming it are users, not contributors. They must not edit files, create branches, commit, push, open PRs, or synchronize changes to this repository unless the owner explicitly authorizes a specific maintenance task. Protocol commands are not write authorization. If an agent finds an issue, it should describe the proposed fix to the user without publishing it. This behavioral policy should be backed by repository permission and branch-protection settings.
-
-## Workflow
-
-- `#init owner/repo` — load the protocol and report concise status; do not select an active project.
-- `#install owner/repo` — inspect the exact target and safely install/merge protocol guidance.
-- `#next` — resume the next appropriate task from durable project state.
-
-Commands are conventions, not platform magic. Agents must use real tools and distinguish verified results from assumptions.
-
-## Project preflight and handoff records
-
-Projects adopting this protocol should keep two separate locations:
-
-- `.agent/PROJECT_PREFLIGHT.md` — project-specific pre-task instructions: required reading, scope, safety, approvals, and how to work.
-- `docs/agent-handoff/` — durable work records: current state, active task, decisions, implementation/audit reports, independent reviews, and templates.
-
-The root `AGENTS.md` should point agents to the preflight file. That preflight file tells agents to read the handoff records before starting or resuming work. The handoff directory records what happened; it is not a substitute for agent instructions.
-
-Use the canonical templates in `templates/PROJECT_PREFLIGHT.md`, `templates/PROJECT_AGENTS_SECTION.md`, and `templates/agent-handoff/`. Customize project facts and constraints; never copy another project's private data or assumptions. Reports must distinguish SUBMITTED agent claims from independently verified and ACCEPTED outcomes.
+Agents consuming this repository are users, not contributors. They must not edit files, create branches, commit, push, open PRs, or synchronize changes here unless the owner explicitly authorizes a specific maintenance task. Protocol commands are not write authorization.
 
 ## Core principle
-
-Repository files—not chat history—are the durable source of truth. Inspect current project instructions and state before acting, make reviewable changes, test where feasible, and record outcomes truthfully.
+Repository files—not chat history—are the durable source of project truth. Session context makes commands convenient; GitHub records make work recoverable. Inspect current project instructions and state before acting, make reviewable changes, test where feasible, and record outcomes truthfully.
 
 ## Repository contents
+- init.md: universal session bootstrap.
+- AI_ENTRY.md: session initialization, routing, context recovery, and project execution.
+- AGENTS.md: universal agent behavior and safety.
+- COMMANDS.md: command registry and routing.
+- INSTALL.md: optional project installation and upgrades.
+- CHECKPOINT_PROTOCOL.md: durable checkpoints, coordination, and handoffs.
+- SECURITY.md: privacy and safety rules.
+- templates/: optional project instruction and continuity templates.
+- adapters/: environment adaptation guidance.
 
-- `init.md`: minimal bootstrap pointer.
-- `AI_ENTRY.md`: bootstrap and execution behavior.
-- `AGENTS.md`: agent safety and working rules.
-- `COMMANDS.md`: command semantics.
-- `INSTALL.md`: safe installation and upgrades.
-- `CHECKPOINT_PROTOCOL.md`: durable checkpoints and handoffs.
-- `SECURITY.md`: privacy and safety rules.
-- `templates/PROJECT_PREFLIGHT.md`: project preflight template to install as `.agent/PROJECT_PREFLIGHT.md`.
-- `templates/PROJECT_AGENTS_SECTION.md`: snippet to integrate into a project's root `AGENTS.md`.
-- `templates/agent-handoff/`: project state, active task, decisions, and report/review templates.
-- `adapters/`: environment adaptation guidance.
-
-## Important limits
-
-Repository discovery may be partial. List connected repositories only as plain `owner/repo` identifiers, with no links, descriptions, visibility labels, or permission details. If discovery is not provably exhaustive, say briefly that the list is partial. Never claim access, edits, tests, pushes, or deployments unless verified.
+Never claim access, edits, tests, pushes, or deployments unless verified.

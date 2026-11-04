@@ -1,7 +1,7 @@
-# Project preflight and handoff requirement
+# Optional project preflight and handoff guidance
 
-Before starting or resuming project work, read `.agent/PROJECT_PREFLIGHT.md` when present. It defines project-specific reading order, scope, constraints, approval boundaries, and workflow.
+Universal Agent Protocol command definitions are loaded by #init from the shared protocol repository; do not duplicate the command registry in this project.
 
-Then read `docs/agent-handoff/README.md`, `CURRENT_STATE.md`, `ACTIVE_TASK.md`, `DECISIONS.md`, and the latest relevant report/review. Verify live repository state; reports and chat summaries are not substitutes for current source inspection.
+When this project has .agent/PROJECT_PREFLIGHT.md, read it before project work. Read .agent/coordination/CURRENT_DIRECTIVE.md when present before selecting the next task. Read docs/agent-handoff/ records when the project uses them.
 
-Put full task reports in `docs/agent-handoff/reports/`, independent reviews in `docs/agent-handoff/reviews/`, and link reports from pull requests. Update current state and active task after meaningful work. Agent-authored reports must be marked SUBMITTED or IN_REVIEW, not ACCEPTED.
+These files are optional project continuity conventions. Their absence does not block protocol initialization or command recognition. Verify live repository state and preserve existing project instructions and records.

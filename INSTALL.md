@@ -1,57 +1,44 @@
 # Installation and Upgrade Guide
 
-## Command-driven workflow
+## Session use (no project installation required)
+1. In any compatible standalone chat, send #init.
+2. The agent retrieves the canonical protocol, loads the universal command registry into the current chat context, and reports readiness.
+3. Use commands in that chat. The agent should not require repeated command explanations or reinitialization before each command.
+4. In a new chat, send #init again. New chats cannot be assumed to inherit another chat's working memory.
+5. Select a project with #project owner/repo or supply the repository directly to a command.
 
-- `#init owner/repo` loads the protocol and verifies retrieval/access.
-- `#install owner/repo` inspects the exact target and safely installs or merges guidance.
-- `#next` resumes the next appropriate task from durable project state.
+No project folder, ChatGPT Project, local preflight file, or per-agent command installation is required for basic protocol use.
 
-Commands are conventions, not platform magic. Verify actual results.
+## Optional project installation
+Use #install owner/repo only when the project benefits from durable local instructions and handoff records. It may add or merge:
+- .agent/PROJECT_PREFLIGHT.md — project-specific guidance;
+- .agent/coordination/CURRENT_DIRECTIVE.md — coordinator control directive, when coordination is used;
+- docs/agent-handoff/ — durable state, tasks, decisions, reports, and reviews.
+
+These are optional project continuity conventions, not the source of universal command definitions. Preserve existing files and customizations.
 
 ## Retrieval and source policy
-
-Read public Markdown through HTTPS/raw, an existing GitHub integration, or browser/search. Repository writes require authorization. Consumer agents must not modify `francis-h-francisco/agent-protocols` unless its maintainer explicitly authorizes a specific maintenance task.
+Read public Markdown through HTTPS/raw, an existing GitHub integration, or browser/search. Repository writes require authorization. Consumer agents must not modify francis-h-francisco/agent-protocols unless its maintainer explicitly authorizes a specific maintenance task.
 
 ## Before writing to a target project
-
 1. Confirm the intended repository and account.
 2. Read README, agent instructions, task queue, project state, and relevant source.
 3. Verify branch, latest commit, and working-tree state if exposed.
 4. Classify files as protocol-managed, project-owned, or mixed. Never blindly replace customized files.
 
-## First installation
-
-1. Create a working branch when supported.
-2. Install `templates/PROJECT_PREFLIGHT.md` as `.agent/PROJECT_PREFLIGHT.md`; customize only with verified project facts.
-3. Integrate `templates/PROJECT_AGENTS_SECTION.md` into root `AGENTS.md`, preserving existing rules.
-4. Install the handoff templates into `docs/agent-handoff/` using this mapping:
-   - `README.md`, `CURRENT_STATE.md`, `ACTIVE_TASK.md`, and `DECISIONS.md` go at the directory root.
-   - `reports/IMPLEMENTATION_REPORT.md` goes to `templates/IMPLEMENTATION_REPORT.md`.
-   - `reviews/REVIEW_REPORT.md` goes to `templates/REVIEW_REPORT.md`.
-   - Create `reports/` and `reviews/` as destinations for task records.
-5. Ensure root `AGENTS.md` points to `.agent/PROJECT_PREFLIGHT.md`, and the preflight points to `docs/agent-handoff/`.
-6. Initialize unknown facts as `UNKNOWN`; never invent project state.
-7. Preserve project-specific instructions, decisions, state, logs, and customizations.
-8. Review for secrets and unrelated content; run available checks.
-9. Commit and open a PR when supported. Report exact branch, commit, PR, checks, and blockers.
+## Safe installation or upgrade
+1. Inspect repository and current branch/commit.
+2. Create a working branch unless the user explicitly authorizes a direct push.
+3. Merge only protocol-managed guidance; preserve project-specific instructions, decisions, state, logs, and customizations.
+4. Initialize unknown project facts as UNKNOWN; never invent state.
+5. Review diffs for secrets and unrelated content; run available checks.
+6. Commit and open a PR when appropriate. Report exact branch, commit, PR, checks, and blockers.
 
 ## Normal task workflow
-
-1. Read root agent instructions and `.agent/PROJECT_PREFLIGHT.md`.
-2. Read handoff README, current state, active task, decisions, and latest relevant report/review.
-3. Verify live branch, commit, PR, and CI.
-4. Write full task reports in `docs/agent-handoff/reports/` and independent reviews in `docs/agent-handoff/reviews/`.
-5. Update current state and active task; link reports from PR descriptions.
-6. In chat, provide concise links, status, blockers, and required owner decisions. Agent-authored reports are SUBMITTED or IN_REVIEW, never self-ACCEPTED.
+Retrieve project instructions and current state from GitHub when relevant. Read optional preflight/handoff files when present. Verify live branch, commit, PR, and CI. Test and record meaningful outcomes. Use existing project conventions; do not create folders solely to satisfy this protocol.
 
 ## Upgrade
-
-Compare installed version and changelog against the target release. Update only protocol-managed files or explicitly managed sections. Preserve project state, logs, and customizations. Describe conflicts rather than overwriting when safe merging is unclear.
+Compare installed version and changelog against the target release. Update only protocol-managed files or explicitly managed sections. Preserve project state and customizations. Describe conflicts rather than overwriting when safe merging is unclear.
 
 ## Public release safety
-
 Before changing visibility, audit all current files and reachable history, including old versions, commit messages, metadata, branches, and tags. History rewriting is destructive and requires explicit approval.
-
-## Empty repositories
-
-Use the existing default branch. Prefer one logical commit when supported; otherwise disclose sequential commits. Verify final contents.

@@ -1,9 +1,9 @@
 # Project Agent Preflight
 
-> Install this file as `.agent/PROJECT_PREFLIGHT.md` in the consuming project. Customize project-specific sections without weakening protocol or security rules.
+> Optional project-specific instructions. Install as .agent/PROJECT_PREFLIGHT.md only when useful; universal Agent Protocol commands do not depend on this file.
 
 ## Purpose and authority
-This file is the project's pre-task initialization checklist. Read it before starting or resuming any task. Follow root `AGENTS.md`, repository-specific instructions, and the shared Agent Protocol. Explicit owner instructions and security constraints take precedence.
+This file records project-specific pre-task instructions. Follow root AGENTS.md, repository-specific instructions, and the shared Agent Protocol. Explicit owner instructions and security constraints take precedence.
 
 ## Project identity and scope
 - Project/repository: UNKNOWN — verify from repository metadata and README.
@@ -12,20 +12,13 @@ This file is the project's pre-task initialization checklist. Read it before sta
 - Out-of-scope work: UNKNOWN — verify project instructions.
 - Related repositories and boundaries: UNKNOWN — verify; do not move responsibilities without authorization.
 
-## Required preflight reading
-1. Root `AGENTS.md` and `README.md`.
-2. This file and any relevant `.agent/` instructions.
-3. `docs/agent-handoff/README.md`.
-4. `docs/agent-handoff/CURRENT_STATE.md`.
-5. `docs/agent-handoff/ACTIVE_TASK.md`.
-6. `docs/agent-handoff/DECISIONS.md`.
-7. The latest relevant report and independent review.
-8. Task queue, architecture/specifications, security guidance, and relevant source/tests.
+## Relevant project reading
+Read root AGENTS.md, README.md, relevant project specifications, security guidance, task/decision records, and source/tests. Read an existing .agent/coordination/CURRENT_DIRECTIVE.md before choosing the next task. Read docs/agent-handoff/ records when present.
 
-If a required file is absent, report it and continue with verified sources; do not invent its contents.
+If a relevant file is absent, continue with verified sources and report material continuity gaps; do not invent its contents.
 
 ## Before acting
-- Verify repository, default/current branch, latest commit, working-tree state if available, open PRs, and CI status.
+- Verify repository, branch, latest commit, open PRs, and CI status as tools permit.
 - Confirm the active task, owner/agent, status, dependencies, scope, and acceptance criteria.
 - Read relevant code and tests; reports are pointers, not substitutes for source inspection.
 - Identify data boundaries, security/privacy concerns, external side effects, costs, and approvals needed.
@@ -36,9 +29,7 @@ If a required file is absent, report it and continue with verified sources; do n
 - Use a dedicated branch and reviewable PR where appropriate.
 - Keep changes focused; preserve unrelated work and project-specific configuration.
 - Test and verify actual behavior. Distinguish executed checks from assumptions.
-- Put full reports in `docs/agent-handoff/reports/` and independent reviews in `docs/agent-handoff/reviews/`.
-- Update current state and active task after meaningful changes; append durable decisions.
-- Link reports from PRs. In chat, return a concise pointer with status, report path, blockers, and required owner decision.
+- Update existing project state/task records after meaningful changes.
 - Mark agent-authored reports SUBMITTED or IN_REVIEW, never ACCEPTED.
 
 ## Safety and approval
