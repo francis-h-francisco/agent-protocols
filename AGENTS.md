@@ -30,7 +30,7 @@
 - Prefer complete, coherent deliverables over needless micro-batches; split when risk, tools, review, or dependencies require it.
 - Capture durable discoveries, decisions, blockers, test outcomes, and next steps during work.
 - Update task status and checkpoints after meaningful work.
-- Put full audit/implementation/verification reports in `docs/agent-handoff/reports/`, independent reviews in `reviews/`, and link reports in PR descriptions.
+- Put full reports in `docs/agent-handoff/reports/`, independent reviews in `docs/agent-handoff/reviews/`, and link reports in PR descriptions.
 - Update `CURRENT_STATE.md` and `ACTIVE_TASK.md` after meaningful work; append durable decisions.
 - Mark agent-authored reports SUBMITTED or IN_REVIEW. Never self-mark work ACCEPTED.
 - Keep chat handoffs concise: repository, task/PR, report path, status, blocker, next action, and owner decision.
