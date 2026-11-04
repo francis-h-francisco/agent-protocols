@@ -1,38 +1,57 @@
 # Installation and Upgrade Guide
 
 ## Command-driven workflow
-- `#init owner/repo` loads the protocol, verifies retrieval/GitHub capabilities, and leaves the active project unset unless explicitly targeted.
-- `#install owner/repo` selects the exact repository as active project, inspects state, and safely installs or merges protocol guidance.
-- `#next` resumes the next appropriate task from the active project's task queue, playbook, and durable state.
 
-Commands are conventions, not platform magic. Use real tools, verify results, and disclose unavailable capabilities.
+- `#init owner/repo` loads the protocol and verifies retrieval/access.
+- `#install owner/repo` inspects the exact target and safely installs or merges guidance.
+- `#next` resumes the next appropriate task from durable project state.
 
-## Retrieval
-For public Markdown, use direct public HTTPS/raw retrieval first, an existing GitHub integration second, and browser/search third. Do not require an account connection, MCP server, download, or fork merely to read public Markdown. Repository writes require authorization.
+Commands are conventions, not platform magic. Verify actual results.
 
-## Protocol source is read-only for consumers
-Agents consuming `francis-h-francisco/agent-protocols` are users, not contributors. Do not edit, branch, commit, push, open PRs, or sync changes to this source repository unless its owner explicitly authorizes a specific maintenance task. This restriction does not prohibit authorized work in a separately designated project repository. If an agent notices a protocol issue, describe the proposed fix without publishing it.
+## Retrieval and source policy
+
+Read public Markdown through HTTPS/raw, an existing GitHub integration, or browser/search. Repository writes require authorization. Consumer agents must not modify `francis-h-francisco/agent-protocols` unless its maintainer explicitly authorizes a specific maintenance task.
 
 ## Before writing to a target project
-1. Confirm intended repository and connected account.
-2. Read README, agent/contributor guidance, playbook, state, task queue, and relevant source files.
-3. Check default/current branch, latest commit, and uncommitted changes if exposed. Never claim local inspection if only remote state is available.
-4. Classify files as protocol-managed, project-owned, or mixed. Never blindly replace mixed/project-owned files.
+
+1. Confirm the intended repository and account.
+2. Read README, agent instructions, task queue, project state, and relevant source.
+3. Verify branch, latest commit, and working-tree state if exposed.
+4. Classify files as protocol-managed, project-owned, or mixed. Never blindly replace customized files.
 
 ## First installation
+
 1. Create a working branch when supported.
-2. Add protocol instructions and missing templates. Merge compatible guidance into existing agent instructions.
-3. Create project state files only if missing; initialize from evidence and label unknown values `UNKNOWN`.
-4. Preserve project-specific instructions, source code, decisions, state, logs, and customizations.
-5. Review changes for secrets, duplicated rules, and unrelated private content.
-6. Run available checks, commit, and open a PR when supported.
-7. Report exact branch, commit, PR, checks, and blockers.
+2. Install `templates/PROJECT_PREFLIGHT.md` as `.agent/PROJECT_PREFLIGHT.md`; customize only with verified project facts.
+3. Integrate `templates/PROJECT_AGENTS_SECTION.md` into root `AGENTS.md`, preserving existing rules.
+4. Install the handoff templates into `docs/agent-handoff/` using this mapping:
+   - `README.md`, `CURRENT_STATE.md`, `ACTIVE_TASK.md`, and `DECISIONS.md` go at the directory root.
+   - `reports/IMPLEMENTATION_REPORT.md` goes to `templates/IMPLEMENTATION_REPORT.md`.
+   - `reviews/REVIEW_REPORT.md` goes to `templates/REVIEW_REPORT.md`.
+   - Create `reports/` and `reviews/` as destinations for task records.
+5. Ensure root `AGENTS.md` points to `.agent/PROJECT_PREFLIGHT.md`, and the preflight points to `docs/agent-handoff/`.
+6. Initialize unknown facts as `UNKNOWN`; never invent project state.
+7. Preserve project-specific instructions, decisions, state, logs, and customizations.
+8. Review for secrets and unrelated content; run available checks.
+9. Commit and open a PR when supported. Report exact branch, commit, PR, checks, and blockers.
+
+## Normal task workflow
+
+1. Read root agent instructions and `.agent/PROJECT_PREFLIGHT.md`.
+2. Read handoff README, current state, active task, decisions, and latest relevant report/review.
+3. Verify live branch, commit, PR, and CI.
+4. Write full task reports in `docs/agent-handoff/reports/` and independent reviews in `docs/agent-handoff/reviews/`.
+5. Update current state and active task; link reports from PR descriptions.
+6. In chat, provide concise links, status, blockers, and required owner decisions. Agent-authored reports are SUBMITTED or IN_REVIEW, never self-ACCEPTED.
 
 ## Upgrade
-Compare installed version/changelog against desired release. Update only protocol-managed files or explicitly managed sections. Preserve project state, logs, and customizations. If safe merging is unclear, describe the conflict rather than overwriting.
+
+Compare installed version and changelog against the target release. Update only protocol-managed files or explicitly managed sections. Preserve project state, logs, and customizations. Describe conflicts rather than overwriting when safe merging is unclear.
 
 ## Public release safety
-Before changing visibility, audit every current file and complete reachable history, including old versions, commit messages, metadata, branches, and tags. Current-file cleanup does not remove prior commits. History rewriting is destructive and requires explicit approval.
+
+Before changing visibility, audit all current files and reachable history, including old versions, commit messages, metadata, branches, and tags. History rewriting is destructive and requires explicit approval.
 
 ## Empty repositories
-Use the existing default branch if one exists. Add the protocol in one logical commit when supported; otherwise use sequential file commits and disclose that choice. Verify final contents.
+
+Use the existing default branch. Prefer one logical commit when supported; otherwise disclose sequential commits. Verify final contents.

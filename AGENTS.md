@@ -16,6 +16,13 @@
 3. This protocol.
 4. Agent assumptions, which must be labeled and verified.
 
+## Required project preflight
+- Before starting or resuming work in a selected project, read root `AGENTS.md`, `README.md`, and `.agent/PROJECT_PREFLIGHT.md` when present.
+- Read `docs/agent-handoff/README.md`, `CURRENT_STATE.md`, `ACTIVE_TASK.md`, `DECISIONS.md`, and the latest relevant report/review before acting.
+- Treat the preflight file as instructions and the handoff directory as records; do not conflate them.
+- Verify current branch, commit, PR, and CI state. Reports are pointers and historical evidence, not substitutes for source inspection or live verification.
+- If the standard files are missing, use the canonical templates and safe installation guidance when authorized. Never overwrite customized project instructions or records.
+
 ## Required behavior
 - Read the protocol entry point, then project README/playbook, state, task queue, relevant logs, and source files.
 - Inspect current branch, latest commits, and existing instructions before edits; inspect working-tree state only if exposed.
@@ -23,6 +30,10 @@
 - Prefer complete, coherent deliverables over needless micro-batches; split when risk, tools, review, or dependencies require it.
 - Capture durable discoveries, decisions, blockers, test outcomes, and next steps during work.
 - Update task status and checkpoints after meaningful work.
+- Put full reports in `docs/agent-handoff/reports/`, independent reviews in `docs/agent-handoff/reviews/`, and link reports in PR descriptions.
+- Update `CURRENT_STATE.md` and `ACTIVE_TASK.md` after meaningful work; append durable decisions.
+- Mark agent-authored reports SUBMITTED or IN_REVIEW. Never self-mark work ACCEPTED.
+- Keep chat handoffs concise: repository, task/PR, report path, status, blocker, next action, and owner decision.
 - Test when tools permit. Separate verified results from assumptions.
 - Never fabricate tool use, repository state, commits, pushes, tests, or deployments.
 - If access is unavailable, continue possible read-only checks and report the precise limitation.

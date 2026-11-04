@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.2
+- Standardized project-specific pre-task instructions at `.agent/PROJECT_PREFLIGHT.md`.
+- Standardized durable project work records at `docs/agent-handoff/`, separate from agent instructions.
+- Added canonical preflight, current-state, active-task, decisions, implementation-report, and independent-review templates.
+- Updated agent bootstrap, installation, command, and checkpoint guidance to read and maintain the project preflight and handoff records.
+- Clarified report states and that agent-authored submissions are not accepted until independently reviewed/authorized.
+
 ## 1.4.1
 - Explicitly designate the protocol repository as a read-only instruction source for consumer agents.
 - Clarify that bootstrap/workflow commands and public visibility do not grant write authorization.

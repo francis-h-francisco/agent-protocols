@@ -6,7 +6,7 @@ Commands express workflow intent, not platform permissions.
 - `github: owner/repo/init.md` — direct file reference fallback.
 - `#help` — show command help only when asked.
 - `#init owner/repo` — load protocol and verify available access; leave active project unset unless explicitly targeted.
-- `#install owner/repo` — inspect and safely install guidance into the exact target; set it as active project.
+- `#install owner/repo` — inspect and safely install guidance into the exact target; set it as active project. Where appropriate, install `.agent/PROJECT_PREFLIGHT.md` and `docs/agent-handoff/` from canonical templates, preserving project-specific instructions and records.
 - `#start` — begin or resume the active project's next task.
 - `#next` / `#proceed` — do the next appropriate task, verify, log, and checkpoint.
 - `#modify` — discuss proposed protocol changes; change shared rules only after explicit maintainer authorization.
@@ -14,6 +14,15 @@ Commands express workflow intent, not platform permissions.
 - `#append` — capture missed durable knowledge.
 - `#sync-protocol owner/repo` — synchronize protocol-managed files into a separately designated project repository only when authorized; never push to the protocol source repository as a side effect.
 - `#status owner/repo` — report verified status and blockers.
+
+## Project preflight and handoff convention
+
+Keep project instructions and work records separate:
+- `.agent/PROJECT_PREFLIGHT.md` contains project-specific instructions to read before starting or resuming work.
+- `docs/agent-handoff/` contains current state, active task, decisions, full reports, independent reviews, and templates.
+- Root `AGENTS.md` points to the preflight; the preflight points to the handoff records.
+
+Use the canonical templates from this repository. Customize only with verified project facts. Reports are durable evidence, not authorization; agents label their own work SUBMITTED or IN_REVIEW, never ACCEPTED.
 
 ## Protocol source write restriction
 
