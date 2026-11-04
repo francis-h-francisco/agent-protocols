@@ -26,9 +26,21 @@ The public `francis-h-francisco/agent-protocols` repository is a maintained sour
 
 This restriction applies only to the protocol source repository. It does not prevent authorized work in a separately designated project repository.
 
+## Project preflight and handoff workflow
+
+When a user selects or installs a project, inspect whether it has `.agent/PROJECT_PREFLIGHT.md` and `docs/agent-handoff/`.
+
+- Treat `.agent/PROJECT_PREFLIGHT.md` as project-specific pre-task instructions. Read it before starting or resuming work, together with root `AGENTS.md` and relevant project guidance.
+- Treat `docs/agent-handoff/` as the durable project work record. Read `README.md`, `CURRENT_STATE.md`, `ACTIVE_TASK.md`, `DECISIONS.md`, and the latest relevant report/review before acting.
+- The root `AGENTS.md` should explicitly point to the preflight file. The preflight file should point to the handoff records.
+- If either location is missing, propose/install it using the canonical templates in this protocol when installation is authorized. Preserve existing project instructions and records; do not overwrite customized files.
+- Verify current branch, commit, PR, and CI status. Treat old records as historical evidence, not live state.
+- Put full reports in `docs/agent-handoff/reports/`, independent reviews in `reviews/`, and link them from PRs. Update current state and active task after meaningful work.
+- Mark agent-authored reports SUBMITTED or IN_REVIEW. Only an authorized owner/reviewer may mark work ACCEPTED.
+
 ## Project execution
 
-1. Read the target repository README, agent/contributor instructions, playbook/specifications, state, task queue, logs, checkpoints, and relevant source files.
+1. Read the target repository README, agent/contributor instructions, `.agent/PROJECT_PREFLIGHT.md` when present, handoff state, playbook/specifications, task queue, logs, checkpoints, and relevant source files.
 2. Verify actual branch and latest commit. Inspect local working-tree state only if exposed.
 3. Follow the next approved, unblocked task. Preserve decisions and avoid needless micro-batching.
 4. Test and verify as far as tools permit.
