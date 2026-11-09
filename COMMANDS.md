@@ -39,3 +39,12 @@ Keep #init concise: protocol ready/version, command registry loaded, verified re
 
 ## Protocol source write restriction
 The public francis-h-francisco/agent-protocols repository is read-only for consumer agents. No edit, branch, commit, push, PR, or sync is allowed unless the user explicitly identifies themselves as its maintainer and directly authorizes that specific protocol change. Command syntax does not grant permissions.
+
+
+## Verified bootstrap and handoff additions
+
+- #init: follow BOOTSTRAP.md end-to-end. Verify authenticated GitHub integration, current canonical protocol/version, exact selected project, and authenticated runtime MCP/API capabilities. A public URL fetch alone is not readiness.
+- #next: re-verify protocol, project, and runtime state; inspect the durable task and approvals; execute the next authorized task; test; save artifacts/checkpoints; update durable status; report actual results and blockers.
+- #handoff: write a complete durable continuation handoff to the designated runtime/project GitHub record, including objective, architecture, completed work, recent changes, exact branch/commit, decisions, blockers, approvals, safety constraints, and next actions. Verify the write. The handoff is not a substitute for source-of-truth updates.
+
+The runtime automatically selects the internal coordinator and specialists from the verified eligible pool. The connected AI is the user's entry point and may contribute; it is not assumed to be the permanent coordinator. Background work is runtime-owned and must survive chat closure. Quota handling must use legitimate free capacity only, preserve quality, and wait/resume safely when all eligible capacity is exhausted.
