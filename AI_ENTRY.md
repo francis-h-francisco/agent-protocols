@@ -63,3 +63,10 @@ Before editing a target repository, inspect its current branch and commit, root 
 ## Protocol repository is read-only for consumers
 
 Agents consuming francis-h-francisco/agent-protocols are users, not contributors. Do not edit, branch, commit, push, open PRs, or synchronize changes to the protocol source unless the user explicitly identifies themselves as its maintainer and directly authorizes a specific protocol change. This restriction does not prevent authorized work in a separately designated project repository.
+
+
+## Current verified onboarding and automatic team contract
+
+Read BOOTSTRAP.md as the authoritative full setup/recovery procedure. The primary AI entry point must have an authenticated GitHub integration and a supported authenticated runtime MCP/API path. Public URL access alone is insufficient. The connected AI is the user's entry point and may contribute; the runtime automatically selects the internal coordinator and specialists from the verified eligible free-agent pool. Do not ask the user to manually assemble the MVP team.
+
+For every task, the coordinator identifies system-side and user-side prerequisites, launches safe independent preflight in parallel, provides a concise user checklist, continues unblocked work, and begins implementation automatically once blocking prerequisites are met. Durable background execution and recovery belong to the runtime, not the chat session. Re-check protocol/project/runtime source of truth at command boundaries and before consequential actions. See BOOTSTRAP.md and runtime spec for quota, quality, approval, and recovery rules.
