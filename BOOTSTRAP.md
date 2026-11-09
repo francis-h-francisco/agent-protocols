@@ -1,60 +1,92 @@
-# Agent Protocols — Verified Bootstrap Contract
+# Agent Protocols — Verified Bootstrap and Operational Onboarding
 
-This file is the authoritative first-run and session-recovery procedure for compatible AI agents.
+This is the authoritative first-run and session-recovery contract. **Protocol initialization is only the first layer of readiness.** It does not, by itself, select/install a project, authorize the runtime, or start work.
+
+## Readiness layers
+
+Keep these states separate and report each truthfully:
+
+1. **Protocol ready:** canonical protocol/version and command registry are loaded in the current chat.
+2. **GitHub ready:** the AI's authenticated GitHub integration is verified and accessible repositories have been enumerated.
+3. **Runtime ready:** the user/AI connection is authenticated to the Agent Protocols Runtime and its permitted capabilities are verified.
+4. **Project ready:** one exact `owner/repo` is selected for this session, or project-local instructions have been installed through the explicit install command.
+5. **Task ready:** the requested task, acceptance criteria, permissions, and required approvals are clear.
+
+Do not collapse these into a single "ready" claim.
 
 ## Required user-side capability
 
-The AI agent used as the user's primary entry point must have an authenticated GitHub connection/integration. It must be able to read this public repository and, after the user selects it, access the intended project repository with the permissions the user grants. It must also be able to connect to the Agent Protocols Runtime through a supported authenticated MCP connection or API/tool adapter.
+The primary AI entry point must support an authenticated GitHub integration and a supported authenticated connection to the Agent Protocols Runtime through MCP or an API/tool adapter. Public URL retrieval alone can load public protocol text, but it does not prove authenticated GitHub project access or runtime capability. A chat subscription does not automatically include API access, MCP, or remote execution.
 
-Public URL access alone is not enough for project operations. A chat product's free subscription does not automatically include API access, remote execution, or MCP support. Verify actual account/platform capabilities. Never claim universal compatibility.
+Never ask the user to paste tokens, API keys, passwords, or other secrets into chat.
 
-## First-time setup — do these steps in order
+## First-time setup
 
-1. **Connect GitHub in the AI product.** Use that product's official GitHub connection flow. Grant only the repository access needed. Never paste a personal access token or secret into chat.
-2. **Load this protocol from its canonical source.** Retrieve the current README.md, VERSION, BOOTSTRAP.md, init.md, AI_ENTRY.md, AGENTS.md, COMMANDS.md, SECURITY.md, and CHECKPOINT_PROTOCOL.md from github.com/francis-h-francisco/agent-protocols. Verify the repository owner/name and current version. Do not rely on copied or stale instructions.
-3. **Verify GitHub capability.** Use the connected GitHub integration to read this public repository. Report the actual connection capability, not just successful public URL retrieval.
-4. **Select the project explicitly.** Ask the user for owner/repo if not already supplied in the current session. Use GitHub to verify the exact repository and inspect its README, AGENTS.md, current branch, latest commit, relevant project docs, issues/PRs, and current handoff/state. Never guess a project.
-5. **Verify runtime access.** Authenticate to the Agent Protocols Runtime using its supported MCP/API connection. Discover identity/workspace, capabilities, permissions, eligible agent pool, quota/health state, current tasks, approvals, and resumable checkpoints. Do not assume a browser portal is required; use it only as a documented authorization/admin fallback.
-6. **Load project and runtime instructions.** Read the project's source-of-truth instructions and the runtime's START_HERE.md, AGENTS.md, docs/STATUS.md, docs/HANDOFF.md, and relevant specification before acting.
-7. **Report readiness truthfully.** State protocol version, GitHub connection verification, selected project, runtime connection/capabilities, and exact blockers. A missing GitHub or runtime connection means the corresponding operations are not ready. Do not claim "ready" based only on reading public Markdown.
+1. **Connect GitHub in the AI product.** Use its official connection flow and grant only the required repository access.
+2. **Run `#init`.** Load the canonical protocol files and version; verify that the authenticated GitHub integration can read the protocol repository; enumerate the exact accessible `owner/repo` identifiers; inspect whether the Agent Protocols Runtime connection is already authorized; and report verified, pending, and blocked capabilities. Do not change the active project. Do not install project files. Do not create a task or start execution.
+3. **Authorize the runtime if needed.** If runtime access is not yet established, guide the user through the documented secure authorization/onboarding surface or supported connector setup. Do not claim runtime readiness until authenticated identity, permissions, and capability discovery succeed. Do not request secrets in chat.
+4. **Choose the project explicitly.** Use `#project owner/repo` to select and verify the project for this session without installing files. Use `#install owner/repo` only when the user wants optional project-local instructions/templates installed or merged; verify the repository first and preserve existing content. Installation sets the active project only after successful verification.
+5. **Start or resume work with `#next` / `#proceed`.** Verify project and runtime readiness, inspect durable task state and approvals, then execute the next authorized task. If no project is selected, ask one concise question; never guess.
+
+## What #init does — and does not do
+
+`#init` is a required session bootstrap, **not the whole operational setup**.
+
+It does:
+- retrieve and verify the canonical protocol source and current VERSION;
+- load the command registry, safety rules, and recovery instructions;
+- verify authenticated GitHub integration capability;
+- list exact repositories accessible to that connected identity;
+- inspect runtime connection/authentication and capability status;
+- report the active project as selected or not selected, without changing it.
+
+It does not:
+- select or install a project;
+- create project files or workspaces;
+- silently change the active project;
+- provision or authorize runtime resources on the user's behalf without the required secure flow;
+- create, assign, or execute a task;
+- replace `#project`, `#install`, or `#next`.
+
+A successful `#init` may therefore report **Protocol ready; GitHub ready; Runtime pending; Project not selected**. That is an honest partial readiness state, not a failed protocol load.
 
 ## Every new chat/session
 
-A new chat must repeat the verification sequence. Chat memory is not the source of truth. Retrieve the latest protocol and project/runtime state from GitHub and the runtime. Do not assume another chat's context carries over.
+A new chat must run `#init` again because chat working context is not the source of truth. Re-verify GitHub and runtime access, enumerate accessible repositories, and restore current protocol rules. Do not assume another chat's context carries over. Do not silently restore or change the active project; select it with `#project` or `#install` when the user directs.
 
 ## Continuous source-of-truth checks
 
-At the start of every command, before consequential actions, after any context-recovery boundary, and before resuming an interrupted task:
+At the start of each command, before consequential actions, after context recovery, and before resuming interrupted work:
+- verify the canonical repository and current VERSION;
+- re-read protocol files changed since the last verification;
+- verify the selected project, branch, commit, relevant instructions, tasks, issues/PRs, and approvals;
+- re-read runtime identity, permissions, task state, assignments, checkpoints, and quota/health state;
+- treat GitHub project records and runtime records as authoritative over chat summaries;
+- record material decisions, progress, blockers, and next actions in the designated durable records;
+- if access fails, stop only actions that require it and report the exact blocker.
 
-- Verify the canonical repository and current VERSION.
-- Re-read any protocol files changed since the session's last verification.
-- Re-read the selected project's relevant source-of-truth instructions and current task/branch/commit/PR state.
-- Re-read runtime task state, approvals, assignments, checkpoints, and quota/health state.
-- Treat GitHub project records and runtime records as authoritative over chat summaries.
-- Record material decisions, progress, blockers, and next action in the project's established durable records.
-- If source-of-truth access fails, stop only the actions that require it; explain the exact blocker and do not guess.
-
-Do not repeatedly dump the protocol into every response. Keep the verified rules in working context and refresh them at the boundaries above. An AI chat cannot execute prompts while it is closed or idle; independent background work is the runtime's responsibility.
+Do not repeatedly dump the protocol into every response. Keep verified rules in working context and refresh them at command boundaries. An AI chat cannot execute prompts while closed or idle; independent background work is the runtime's responsibility.
 
 ## Default task behavior
 
-For each request, the coordinator must understand the desired outcome and acceptance criteria; inspect known project/runtime state; identify system-side and user-side prerequisites; launch safe independent preflight work in parallel; give the user a concise actionable checklist; continue unblocked work; and start implementation automatically when blocking prerequisites are satisfied. It must complete build, integration, testing, review, fixes, and delivery within authorization. Do not ask for redundant start confirmation.
+For each task, the coordinator understands the desired outcome and acceptance criteria; inspects project/runtime state; identifies system-side and user-side prerequisites; launches safe independent preflight work in parallel; gives the user a concise actionable checklist; continues unblocked work; and starts implementation automatically once blocking prerequisites are satisfied and authorization permits. It completes build, integration, testing, review, fixes, and delivery within the approved scope.
 
-The runtime automatically selects an internal coordinator and specialists from its verified eligible agent pool. The user does not need to manually choose agents for the MVP. A connected entry-point AI may contribute but is not assumed to be the permanent coordinator.
+The runtime automatically selects its internal coordinator and specialists from the verified eligible agent pool. The user does not manually assemble the team. The connected entry-point AI may contribute but is not assumed to be the permanent coordinator.
 
 ## Background work and limits
 
-Tasks must persist and resume independently of the user's chat or assigned coordinator. The runtime owns durable state, dispatch, leases, idempotency, checkpoints, approvals, quota management, and recovery.
+Tasks persist and resume independently of the user's chat or assigned coordinator. The runtime owns durable state, dispatch, leases, idempotency, checkpoints, approvals, quota management, and recovery.
 
-Use legitimate free provider failover, task decomposition, context compaction, caching, and scheduling to maximize capacity. Preserve minimum quality. Never evade quotas, rotate identities to defeat limits, abuse trials, or use paid fallback. If all eligible capacity is exhausted, preserve progress, wait for capacity/reset, and resume automatically.
+Use legitimate free provider failover, task decomposition, context compaction, caching, and scheduling. Preserve required quality. Never evade quotas, rotate identities to defeat limits, abuse trials, silently lower quality, or use paid fallback. If all eligible capacity is exhausted, preserve progress, wait durably, and resume when capacity returns.
 
 ## Command vocabulary
 
-- #init — perform this complete bootstrap/recovery contract.
-- #project owner/repo — select and verify the exact project.
-- #status — report verified protocol, project, runtime, task, and blocker state.
-- #next — inspect durable state and execute the next authorized task; verify sources first, then implement, test, checkpoint, and report.
-- #pause — checkpoint progress and stop further execution.
-- #handoff — write a complete continuation handoff to the runtime/project's designated durable GitHub location, including overall objective, current architecture, completed work, recent changes, exact repository/branch/commit state, decisions, blockers, approvals, safety constraints, and next actions. Verify the write. Do not replace the requested compact response with the handoff contents.
+- `#init` — protocol/session bootstrap and GitHub/runtime capability verification; does not select/install a project or start work.
+- `#project owner/repo` — verify and select the exact active project; does not install files.
+- `#install owner/repo` — optionally install/merge project-local instructions/templates into the exact repository; set it active only after successful verification.
+- `#status` — report verified protocol, GitHub, runtime, project, task, and blocker state.
+- `#next` / `#proceed` — inspect durable state and execute the next authorized task; test, checkpoint, and report.
+- `#pause` — checkpoint progress and stop further execution.
+- `#handoff` — write a complete continuation handoff to the designated runtime/project GitHub location and verify the write.
 
-Commands are workflow triggers, not permissions to bypass security or user approvals. Human approval remains required for consequential actions such as production deployment, destructive changes, protected-branch merge, billing/security changes, and external commitments.
+Commands are workflow triggers, not permissions to bypass security or user approvals. Human approval remains required for production deployment, destructive changes, protected-branch merges, billing/security changes, and external commitments.
