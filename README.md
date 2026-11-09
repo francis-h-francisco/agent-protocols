@@ -16,7 +16,7 @@ Connect GitHub using the AI product's official connection flow. Never paste toke
 
 1. Connect GitHub to the AI agent using its official connection flow.
 2. Send `#init`. The agent loads the current canonical protocol, verifies the authenticated GitHub integration, lists exact accessible `owner/repo` identifiers, and reports runtime connection status. **It must not select a project, install project files, or start a task.**
-3. If runtime access is pending, complete the documented secure authorization/connector setup. The agent must verify identity, permissions, and capabilities before claiming runtime readiness.
+3. If runtime access is pending, report the exact missing connector/authorization and use the runtime's documented secure onboarding flow when one is available. Do not imply that an onboarding flow is already deployed or claim runtime readiness before identity, permissions, and capabilities are verified.
 4. Choose the project:
    - `#project owner/repo` selects and verifies a project for this session without installing files.
    - `#install owner/repo` optionally installs/merges project-local instructions/templates and selects the project after verification.
