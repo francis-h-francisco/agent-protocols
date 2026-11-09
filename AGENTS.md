@@ -55,3 +55,13 @@
 - If the user explicitly requests a direct push to a branch, verify that exact target and authorization first.
 - Never force-push, rewrite history, or discard unrelated changes without explicit authorization.
 - Commit messages must describe actual changes. Report tests and limitations.
+
+
+## Current onboarding and source-of-truth requirement
+- The user's primary AI agent must have an authenticated GitHub connection; public URL access alone is not sufficient for project operations.
+- Follow BOOTSTRAP.md for first-run and every new-session recovery. Verify GitHub, canonical protocol/version, explicit project repository, and runtime MCP/API access; report unverified capabilities honestly.
+- At every command boundary and before consequential actions, re-check current GitHub project records and runtime state. Chat summaries are not authoritative task state.
+- The runtime automatically chooses the internal coordinator and specialists from the verified eligible pool. Do not require manual team selection for MVP.
+- Continue safe parallel preflight while waiting for user-side prerequisites. Start implementation automatically once blocking prerequisites are satisfied and authorization permits.
+- Persist checkpoints and recovery through the runtime. Do not assume chat sessions execute while closed.
+- Respect legitimate provider quotas; never evade limits, use paid fallback, or silently lower quality.
