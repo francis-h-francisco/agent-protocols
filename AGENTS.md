@@ -1,12 +1,14 @@
 # Instructions for AI Agents
 
 ## Session-first bootstrap
-- #init loads the canonical Agent Protocol from francis-h-francisco/agent-protocols, unless the user supplies another explicit protocol source.
-- Read VERSION, AI_ENTRY.md, AGENTS.md, and COMMANDS.md; load the command registry and operating rules into the current chat context.
-- Keep command knowledge available throughout the current chat. Do not require reinitialization before each command.
-- A new chat has a new working context. On #init, retrieve the current source again; do not claim guaranteed cross-chat memory.
+- `#init` loads the canonical Agent Protocol from `francis-h-francisco/agent-protocols`, unless the user supplies another explicit protocol source.
+- Read VERSION, AI_ENTRY.md, AGENTS.md, and COMMANDS.md; load the command registry and operating rules into the current chat.
+- Verify authenticated GitHub integration capability and enumerate exact accessible `owner/repo` identifiers; public URL retrieval alone is not authenticated project access.
+- Check authenticated runtime MCP/API access separately and report verified, pending, and blocked states accurately.
+- `#init` does not select/install a project, change active project, create a task, or start execution. Preserve the active project or leave it unset.
+- Keep command knowledge available throughout the current chat. A new chat must retrieve the current source again.
 - If a command arrives before initialization, attempt bootstrap automatically when possible, then route the command if safe.
-- Keep readiness responses concise. Do not volunteer a command catalog or file inventory.
+- Keep readiness responses concise; do not volunteer a command catalog or file inventory.
 
 ## Authority order
 1. Explicit current user instructions and safety constraints.
@@ -16,21 +18,22 @@
 
 ## Command routing
 - Use COMMANDS.md as the authoritative command registry.
-- Commands trigger their documented retrieval/action sequence, not permissions beyond the user's authorization.
+- Commands trigger their documented retrieval/action sequence, not permissions beyond user authorization.
 - Explicit repository arguments take precedence for that command. Do not silently change the active project.
+- `#project owner/repo` selects a project; `#install owner/repo` optionally installs project-local guidance. Neither is a side effect of `#init`.
 - If a command needs a repository and none is selected or supplied, ask which repository; never guess.
 - Do not require a project-local preflight file or special project folder for universal command recognition.
 
 ## Session context and recovery
-- Maintain protocol readiness, active repository, task/status, and unresolved blockers in current chat context.
+- Maintain protocol readiness, GitHub verification/repository identifiers, runtime status, active repository, task/status, and unresolved blockers in current chat context.
 - Verify required context at command start and before consequential actions.
-- If command definitions or context are missing or contradictory, re-fetch relevant protocol files and re-verify project state.
+- If command definitions or context are missing or contradictory, re-fetch relevant protocol files and re-verify project/runtime state.
 - If recovery fails, stop before consequential action and report the precise limitation.
-- Do not claim cross-chat persistence or perfect detection of silent memory degradation. Agents cannot poll while idle; recovery is triggered at interaction/task boundaries.
+- Do not claim cross-chat persistence or perfect detection of silent memory degradation.
 
 ## Project inspection and continuity
 - Before editing, inspect repository instructions, README, branch, latest commit, relevant source, existing task/decision records, PRs, and CI as tools permit.
-- Read .agent/PROJECT_PREFLIGHT.md and docs/agent-handoff/ records when they exist and are relevant. Their absence does not block ordinary use of the protocol.
+- Read project preflight/handoff records when they exist and are relevant; their absence does not block ordinary protocol use.
 - Retrieve project-specific instructions from GitHub when needed; do not force every project to install duplicate universal command definitions.
 - Preserve architecture, naming, dependencies, approved decisions, and unrelated work unless explicitly asked to change them.
 - Use existing project record conventions. Create continuity files only when requested or genuinely needed for durable coordination/handoff.
@@ -45,7 +48,7 @@
 - If access is unavailable, continue possible read-only checks and report the exact limitation.
 
 ## Protocol source policy
-- francis-h-francisco/agent-protocols is read-only for consumer agents.
+- `francis-h-francisco/agent-protocols` is read-only for consumer agents.
 - Do not modify it unless the user explicitly identifies themselves as its maintainer and directly authorizes a specific protocol maintenance task.
 - Bootstrap, install, sync, or project commands do not grant permission to modify the protocol source.
 - Public visibility and technically available write access do not imply authorization.
@@ -56,12 +59,8 @@
 - Never force-push, rewrite history, or discard unrelated changes without explicit authorization.
 - Commit messages must describe actual changes. Report tests and limitations.
 
-
-## Current onboarding and source-of-truth requirement
-- The user's primary AI agent must have an authenticated GitHub connection; public URL access alone is not sufficient for project operations.
-- Follow BOOTSTRAP.md for first-run and every new-session recovery. Verify GitHub, canonical protocol/version, explicit project repository, and runtime MCP/API access; report unverified capabilities honestly.
-- At every command boundary and before consequential actions, re-check current GitHub project records and runtime state. Chat summaries are not authoritative task state.
-- The runtime automatically chooses the internal coordinator and specialists from the verified eligible pool. Do not require manual team selection for MVP.
-- Continue safe parallel preflight while waiting for user-side prerequisites. Start implementation automatically once blocking prerequisites are satisfied and authorization permits.
-- Persist checkpoints and recovery through the runtime. Do not assume chat sessions execute while closed.
+## Automatic team and durable execution
+- The runtime automatically chooses the internal coordinator and specialists from the verified eligible pool.
+- Continue safe parallel preflight while user-side prerequisites are pending; start implementation automatically once blockers are satisfied and authorization permits.
+- Persist checkpoints and recovery through the runtime; do not assume chat sessions execute while closed.
 - Respect legitimate provider quotas; never evade limits, use paid fallback, or silently lower quality.
