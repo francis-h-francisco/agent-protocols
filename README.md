@@ -4,44 +4,56 @@
 
 Agent Protocols gives compatible AI agents a shared way to initialize sessions, select repositories, follow project instructions, execute approved work, and preserve handoffs in GitHub.
 
-It is designed to stay simple: one public protocol, a small command set, and each project's own repository as its source of truth.
+One public protocol. A small command set. Each project's own repository remains its source of truth.
 
 ## Quick start
 
-In a compatible AI chat, send:
+### First-time setup
+
+A fresh AI chat does not automatically know what `#init` means. Bootstrap the protocol first by sending:
+
+```text
+Read and follow https://raw.githubusercontent.com/francis-h-francisco/agent-protocols/main/init.md
+```
+
+If the agent cannot retrieve public URLs, open [init.md](init.md) and provide its contents to the agent.
+
+### Later sessions
+
+Once the agent has been configured with the protocol instructions, start a new session with:
 
 ```text
 #init
 ```
 
-The agent retrieves the current protocol, loads its command and safety rules, verifies the version, and confirms readiness. Initialize again in a new chat; session context is not assumed to carry over.
+This reloads the current protocol and command registry. If the agent does not retain the configured instructions between chats, repeat the first-time bootstrap prompt.
 
-Select a project:
+Select a project after initialization:
 
 ```text
 #project owner/repository
 ```
 
-No project installation is required for ordinary use.
+Initialization does not select or install a project.
 
 ## Core commands
 
 | Command | Purpose |
 |---|---|
-| `#init` | Load or restore the protocol for this chat |
-| `#project owner/repo` | Select the active project |
+| `#init` | Load or restore the protocol in a configured agent |
+| `#project owner/repo` | Select the active project for this session |
 | `#status` | Report verified project state |
 | `#next` / `#proceed` | Continue the next authorized task |
 | `#coor` | Publish or update the project coordination directive |
 | `#install owner/repo` | Optionally add project-local guidance |
-| `#pause` | Record progress, decisions, and the next action |
+| `#pause` | Record progress, decisions, blockers, and next action |
 | `#help` | Show command guidance |
 
 Commands describe workflow intent; they do not grant repository, account, deployment, or spending permissions.
 
 ## How it works
 
-1. **Initialize** — retrieve the canonical protocol and load the command registry.
+1. **Initialize** — retrieve the canonical protocol and load its command and safety rules.
 2. **Select** — identify the exact project repository; never guess the target.
 3. **Inspect** — read project instructions, current state, and outstanding work.
 4. **Act** — make focused, reviewable changes only within the user's authorization.
