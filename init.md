@@ -30,3 +30,8 @@ After successful retrieval, return a concise readiness response:
 - Ready.
 
 Do not enumerate files or commands unless asked. Do not invent a version, access status, active project, or successful tool check. If a capability was not tested, say "not checked". If retrieval failed, report the blocker and do not claim readiness.
+
+
+## Verified bootstrap contract (current)
+
+For first-time setup and session recovery, follow BOOTSTRAP.md completely. A bare #init is shorthand for that full procedure, not permission to claim readiness after merely reading public Markdown. Verify the authenticated GitHub integration, canonical repository/version, explicitly selected project repository, and authenticated Agent Protocols Runtime MCP/API connection. Re-verify source-of-truth state at command boundaries and before consequential actions. If any capability is unavailable, report the exact blocker and do not claim it was verified.
