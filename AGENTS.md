@@ -3,7 +3,7 @@
 ## Session-first bootstrap
 - `#init` loads the canonical Agent Protocol from `francis-h-francisco/agent-protocols`, unless the user supplies another explicit protocol source.
 - Read VERSION, AI_ENTRY.md, AGENTS.md, and COMMANDS.md; load the command registry and operating rules into the current chat.
-- Verify authenticated GitHub integration capability and enumerate exact accessible `owner/repo` identifiers; public URL retrieval alone is not authenticated project access.
+- Follow `AI_ENTRY.md` steps 1–5. Enumerate exact accessible `owner/repo` identifiers through the runtime's `repo_list`, or the agent's own authenticated GitHub integration; public URL retrieval alone is not authenticated project access.
 - Check authenticated runtime MCP/API access separately and report verified, pending, and blocked states accurately.
 - `#init` does not select/install a project, change active project, create a task, or start execution. Preserve the active project or leave it unset.
 - Keep command knowledge available throughout the current chat. A new chat must retrieve the current source again.

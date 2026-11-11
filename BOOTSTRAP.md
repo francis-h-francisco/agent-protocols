@@ -7,7 +7,7 @@ This is the authoritative first-run and session-recovery contract. **Protocol in
 Keep these states separate and report each truthfully:
 
 1. **Protocol ready:** canonical protocol/version and command registry are loaded in the current chat.
-2. **GitHub ready:** the AI's authenticated GitHub integration is verified and accessible repositories have been enumerated.
+2. **GitHub ready:** accessible repositories have been enumerated, through the runtime's GitHub bridge (`repo_list`) or the AI's own authenticated GitHub integration.
 3. **Runtime ready:** the user/AI connection is authenticated to the Agent Protocols Runtime and its permitted capabilities are verified.
 4. **Project ready:** one exact `owner/repo` is selected for this session, or project-local instructions have been installed through the explicit install command.
 5. **Task ready:** the requested task, acceptance criteria, permissions, and required approvals are clear.
@@ -16,14 +16,14 @@ Do not collapse these into a single "ready" claim.
 
 ## Required user-side capability
 
-The primary AI entry point must support an authenticated GitHub integration and a supported authenticated connection to the Agent Protocols Runtime through MCP or an API/tool adapter. Public URL retrieval alone can load public protocol text, but it does not prove authenticated GitHub project access or runtime capability. A chat subscription does not automatically include API access, MCP, or remote execution.
+The primary AI entry point must support a connection to the Agent Protocols Runtime through MCP (a custom connector) or an API/tool adapter. Once connected, the runtime also provides GitHub access, so a separate GitHub integration is optional. Connection details are in `RUNTIME.md`. Public URL retrieval alone can load public protocol text, but it does not prove authenticated GitHub project access or runtime capability. A chat subscription does not automatically include API access, MCP, or remote execution.
 
 Never ask the user to paste tokens, API keys, passwords, or other secrets into chat.
 
 ## First-time setup
 
-1. **Connect GitHub in the AI product.** Use its official connection flow and grant only the required repository access.
-2. **Run `#init`.** Load the canonical protocol files and version; verify that the authenticated GitHub integration can read the protocol repository; enumerate the exact accessible `owner/repo` identifiers; inspect whether the Agent Protocols Runtime connection is already authorized; and report verified, pending, and blocked capabilities. Do not change the active project. Do not install project files. Do not create a task or start execution.
+1. **Send `#init github.com/francis-h-francisco/agent-protocols`.** The agent follows `AI_ENTRY.md`. If the runtime is not connected, it guides the one-time connector setup from `RUNTIME.md`, and the person enters their access password in the sign-in window, never in chat.
+2. **What `#init` checks.** Load the canonical protocol files and version; check whether the Agent Protocols Runtime connection is authorized (guiding the one-time connector setup if not); enumerate the exact accessible `owner/repo` identifiers through the runtime's `repo_list` or the agent's own GitHub integration; and report verified, pending, and blocked capabilities. Do not change the active project. Do not install project files. Do not create a task or start execution.
 3. **Authorize the runtime if needed.** If runtime access is not yet established, guide the user through the documented secure authorization/onboarding surface or supported connector setup. Do not claim runtime readiness until authenticated identity, permissions, and capability discovery succeed. Do not request secrets in chat.
 4. **Choose the project explicitly.** Use `#project owner/repo` to select and verify the project for this session without installing files. Use `#install owner/repo` only when the user wants optional project-local instructions/templates installed or merged; verify the repository first and preserve existing content. Installation sets the active project only after successful verification.
 5. **Start or resume work with `#next` / `#proceed`.** Verify project and runtime readiness, inspect durable task state and approvals, then execute the next authorized task. If no project is selected, ask one concise question; never guess.
@@ -35,7 +35,7 @@ Never ask the user to paste tokens, API keys, passwords, or other secrets into c
 It does:
 - retrieve and verify the canonical protocol source and current VERSION;
 - load the command registry, safety rules, and recovery instructions;
-- verify authenticated GitHub integration capability;
+- verify GitHub access through the runtime's bridge or the agent's own authenticated integration;
 - list exact repositories accessible to that connected identity;
 - inspect runtime connection/authentication and capability status;
 - report the active project as selected or not selected, without changing it.

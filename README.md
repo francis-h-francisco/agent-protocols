@@ -1,38 +1,37 @@
+> **AI agents: start here.** The user gave you this repository to initialize Agent Protocols. Before replying, open [`AI_ENTRY.md`](https://raw.githubusercontent.com/francis-h-francisco/agent-protocols/main/AI_ENTRY.md) and follow its steps in order.
+
 # Agent Protocols
 
 **A portable protocol, project-onboarding, execution, and continuity layer for GitHub-connected AI agents.**
 
 Agent Protocols gives compatible AI agents a shared command contract for loading protocol rules, verifying connected repositories and runtime access, selecting or installing project context, coordinating authorized work, and preserving progress across sessions.
 
-## Important prerequisite: authenticated GitHub connection
+## Getting started
 
-The primary AI agent must support an authenticated GitHub connection/integration. It must be able to verify the canonical protocol and access the project repositories the user authorizes. Public web browsing or reading a raw Markdown URL alone does not prove project access.
+Send this to any AI agent:
 
-The full workflow also requires a supported authenticated connection to the Agent Protocols Runtime through MCP or an API/tool adapter. Compatibility varies by AI product and account plan. A free chat subscription does not automatically include API access, cloud execution, or MCP support.
+```
+#init github.com/francis-h-francisco/agent-protocols
+```
 
-Connect GitHub using the AI product's official connection flow. Never paste tokens, API keys, passwords, or other secrets into chat.
+The agent reads the protocol and checks whether it is connected to the Agent Protocols Runtime. The first time in each AI product, it walks you through adding the runtime as a connector; it supplies the address, so you have nothing to remember. A sign-in window then asks for your **access password**. Once it accepts, the window closes and returns to the chat.
 
-## First-time setup
+Then send `#help`.
 
-1. Connect GitHub to the AI agent using its official connection flow.
-2. Send `#init`. The agent loads the current canonical protocol, verifies the authenticated GitHub integration, lists exact accessible `owner/repo` identifiers, and reports runtime connection status. **It must not select a project, install project files, or start a task.**
-3. If runtime access is pending, report the exact missing connector/authorization and use the runtime's documented secure onboarding flow when one is available. Do not imply that an onboarding flow is already deployed or claim runtime readiness before identity, permissions, and capabilities are verified.
-4. Choose the project:
-   - `#project owner/repo` selects and verifies a project for this session without installing files.
-   - `#install owner/repo` optionally installs/merges project-local instructions/templates and selects the project after verification.
-5. Use `#next` / `#proceed` to inspect durable task state and execute the next authorized task.
-
-**Important:** `#init` alone does not complete project onboarding or start work. Protocol, GitHub, runtime, project, and task readiness are separate states. Follow the readiness report and resolve only the actual blockers.
+- **Access is by invitation.** The runtime owner sends you a one-time link that gives you your own password. Never type your password into a chat.
+- **One connector is enough.** The runtime also gives the agent GitHub access to the repositories you may use, so a separate GitHub integration is optional.
+- **Some AI products or plans** (often free tiers) cannot add custom connectors. The agent will say so.
 
 ## Later sessions
 
-Start with `#init` to reload the canonical protocol and re-verify GitHub/runtime access. It does not silently restore or change the active project. Select the intended project with `#project owner/repo`, or use `#install owner/repo` if project-local setup is wanted, then use `#next` to resume work.
+Start each new chat with `#init github.com/francis-h-francisco/agent-protocols` (or just `#init` in agents that already know it) to reload the protocol and re-check the runtime. It does not silently restore or change the active project. Select the intended project with `#project owner/repo`, or use `#install owner/repo` if project-local setup is wanted, then use `#next` to resume work.
 
 ## Core commands
 
 | Command | Purpose |
 |---|---|
-| `#init` | Load protocol; verify GitHub connection, accessible repositories, and runtime status |
+| `#init github.com/francis-h-francisco/agent-protocols` | Load the protocol; connect or check the runtime; list your repositories |
+| `#help` | What you can do now |
 | `#project owner/repo` | Select and verify the active project; no file installation |
 | `#install owner/repo` | Optional project-local instruction/template installation and project selection |
 | `#status` | Report verified protocol, GitHub, runtime, project, task, and blocker state |
@@ -74,6 +73,7 @@ The normal interaction is through the user's connected AI and authenticated runt
 
 - [BOOTSTRAP.md](BOOTSTRAP.md) — full bootstrap and operational onboarding contract
 - [init.md](init.md) — compact session bootstrap entry point
+- [RUNTIME.md](RUNTIME.md) — runtime address, connection steps per AI product, and tools
 - [AI_ENTRY.md](AI_ENTRY.md) — agent entry and execution rules
 - [AGENTS.md](AGENTS.md) — safety and behavior rules
 - [COMMANDS.md](COMMANDS.md) — command registry

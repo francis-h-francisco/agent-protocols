@@ -1,22 +1,35 @@
-# AI Agent Entry Point
+# AI Agent Entry Point — follow these steps in order
 
-This protocol is repository-backed and command-driven. The minimal root `init.md` is the universal session bootstrap entry point. Read BOOTSTRAP.md for the complete distinction between protocol readiness and operational/project readiness.
+You are here because the user sent `#init github.com/francis-h-francisco/agent-protocols`, or `#init`. Complete steps 1–5 **before replying** and before doing anything else. If a step is impossible in your environment, say exactly which one and why, then continue with the next.
 
-## Session initialization
+**Step 1: load the protocol.** Read these files from `francis-h-francisco/agent-protocols` (branch `main`):
+- `VERSION`: https://raw.githubusercontent.com/francis-h-francisco/agent-protocols/main/VERSION
+- `AGENTS.md`: https://raw.githubusercontent.com/francis-h-francisco/agent-protocols/main/AGENTS.md
+- `COMMANDS.md`: https://raw.githubusercontent.com/francis-h-francisco/agent-protocols/main/COMMANDS.md
+- `RUNTIME.md`: https://raw.githubusercontent.com/francis-h-francisco/agent-protocols/main/RUNTIME.md
 
-When the user sends `#init` with no argument, load the canonical protocol from `francis-h-francisco/agent-protocols`. If an explicit protocol source is supplied, retrieve that exact source and verify it. Read VERSION, this file, AGENTS.md, and COMMANDS.md; read CHECKPOINT_PROTOCOL.md and SECURITY.md before project execution or when relevant.
+If you can reach none of them but the runtime is connected, call its `protocol_get` tool instead. Keep the command registry and rules in mind for the rest of this chat. Never claim a version you did not read.
 
-The primary AI must verify its authenticated GitHub integration, confirm access to the canonical protocol, and enumerate exact accessible `owner/repo` identifiers. It must separately verify whether the authenticated Agent Protocols Runtime MCP/API connection is available. Public URL access alone is not proof of authenticated GitHub or runtime access.
+**Step 2: check the runtime connection.** Look among your available tools for the Agent Protocols Runtime (tools such as `runtime_status` and `protocol_get`).
+- If present, call `runtime_status`. Success means **Runtime ready**; note the person's name, role and repositories.
+- If the tools are missing, or the call needs sign-in, go to step 3.
 
-After reading the command registry and rules:
-1. Load command meanings, routing rules, safety boundaries, and recovery procedure into the current chat's working context.
-2. Keep protocol context available for the remainder of the current chat. Do not ask the user to repeat command definitions or reinitialize before each command.
-3. Report GitHub repository access and runtime readiness separately, including exact blockers.
-4. Report the active project only if already explicitly selected or unambiguously established in the current session; otherwise leave it unset.
-5. Do not select/install a project, create project files, change active project, create a task, or start execution as a side effect of `#init`.
-6. Return a concise readiness report with protocol version, GitHub verification/repository identifiers, runtime status, and active project or not selected.
+**Step 3: if not connected, guide the one-time connection.** Using `RUNTIME.md`:
+- Give the user the steps for **your own product**, with the MCP endpoint ready to copy. They should never have to find it themselves.
+- Tell them the sign-in window will ask for their **access password**, and that the password goes only in that window, never in chat.
+- If your product or plan cannot add custom connectors, say so plainly.
+- Stop and wait. When they say they are done, repeat step 2.
 
-A fresh chat does not reliably inherit another chat's working context. When the user sends `#init` in a new chat, retrieve the current source again. Do not claim cross-chat memory unless the platform explicitly verifies it.
+**Step 4: GitHub readiness.** If the runtime is connected, call `repo_list`: the runtime is the GitHub bridge, and that list is the person's accessible repositories. Otherwise, use your own authenticated GitHub integration if you have one. Public web reading alone is not authenticated access.
+
+**Step 5: reply briefly.**
+- Protocol version.
+- Runtime: ready as `<name>`, or exactly what is pending.
+- Repositories: the exact `owner/repo` list, or how many and how to see them.
+- Active project: `not selected` unless it was already selected in this chat.
+- End with: **"Send `#help` to see what you can do."**
+
+Do not select or install a project, create a task, or start work as part of initialization. A new chat is a new context: when the user sends `#init` again in a new chat, repeat these steps.
 
 ## Command dispatch
 

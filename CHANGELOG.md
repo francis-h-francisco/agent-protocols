@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.7.0
+- The standard first command is `#init github.com/francis-h-francisco/agent-protocols`, which works in any AI agent. The README's first line sends agents to `AI_ENTRY.md`.
+- `AI_ENTRY.md` is now an ordered, step-by-step checklist (breadcrumbs): load the protocol, check the runtime, guide the one-time connector setup, list repositories, and reply ending with `#help`.
+- New `RUNTIME.md` holds the runtime's endpoint, connection steps per AI product, sign-in, and tools. Users never need to know the URL.
+- Sign-in is a per-person access password, entered only in the runtime's sign-in window. Access is by owner invitation.
+- The runtime is the GitHub bridge (`repo_list`, `repo_read`), so a separate GitHub integration is optional. `protocol_get` serves the protocol through the runtime.
+- `#help` is defined as a short, readiness-aware guide.
+- Added the owner access commands `#invite`, `#people`, `#grant` and `#revoke`.
+- An unmerged 1.7.0 branch from earlier was superseded and is not this release.
+
 ## 1.6.0
 - Added BOOTSTRAP.md as the authoritative first-run and session-recovery contract.
 - Stated the prerequisite plainly: the primary AI must have an authenticated GitHub integration; public Markdown retrieval alone does not prove project access.
