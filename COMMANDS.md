@@ -4,15 +4,30 @@ Commands express workflow intent, not platform permissions. This file is the uni
 
 ## Session initialization and readiness
 
-- `#init` — load/restore the canonical protocol in this chat; verify authenticated GitHub access; enumerate exact accessible `owner/repo` identifiers; inspect authenticated runtime connection status; report readiness layers. Does **not** select/install a project, change active project, create tasks, or execute work.
-- `#init owner/repo` — backward-compatible explicit protocol-source form only when the user intends that repository to be the protocol source. Do not confuse it with project selection.
-- `#help` — show command help when asked.
+- `#init github.com/francis-h-francisco/agent-protocols` — **the standard first command, in any AI agent.** Open the repository, then follow `AI_ENTRY.md` steps 1–5. The steps: load the protocol, check or guide the runtime connection (`RUNTIME.md`), list accessible repositories, and report readiness. Does **not** select or install a project, create tasks, or execute work.
+- `#init` — the same, for an agent that already knows the canonical source.
+- `#init owner/repo` — use another repository as the protocol source, only when the user clearly intends that. Do not confuse it with project selection.
+- `#help` — a short, friendly guide to what the user can do **now**, based on verified readiness:
+  - Not connected: how to finish connecting.
+  - Connected, no project: `#project owner/repo` with their actual repositories as examples.
+  - Project selected: `#next`, `#status` and how to give the team a task in plain words.
+  - The owner also sees the access commands.
+  - Keep it under about 12 lines. Offer the full list only if asked.
 
 ## Project selection and setup
 
 - `#project owner/repo` — verify and select the exact active project for this session. Does not install files.
 - `#install owner/repo` — optional project-local setup: inspect existing guidance, then install/merge project-specific instructions/templates only when requested. Preserve existing content. Set the project active only after successful verification and installation.
 - `#coor [owner/repo]` — inspect project instructions/state/open work/blockers and publish/update its coordination directive in the established location (or `.agent/coordination/CURRENT_DIRECTIVE.md` if genuinely needed). Default to a reviewable branch/PR. Does not execute the directive's application task.
+
+## Access (runtime owner only)
+
+- `#invite name [owner/repo ...]` — create a one-time invite link (`access_invite`) for a new person, optionally granting repositories. Give the link to the owner to send privately. The person's password appears only on that page.
+- `#people` — list people, their repositories and open invites (`access_list`).
+- `#grant name owner/repo ...` — set the repositories a person may use (`access_grant`).
+- `#revoke name` — disable a person and sign them out everywhere (`access_revoke`).
+
+Never ask for, accept, display or store anyone's password in chat.
 
 ## Work and continuity
 
@@ -44,7 +59,7 @@ The coordinator publishes the directive. The executing agent reads it at initial
 
 ## Bootstrap response
 
-Keep `#init` concise but truthful. Report protocol/version, authenticated GitHub verification and exact accessible repository identifiers, runtime connection status, and active project or not selected. Do not dump the command catalog unless asked.
+Keep `#init` concise but truthful. Report the protocol version, runtime status (ready as `<name>`, or the exact pending step), accessible repositories (through the runtime's `repo_list` or the agent's own GitHub integration), and the active project or `not selected`. End with "Send `#help` to see what you can do." Do not dump the command catalog unless asked.
 
 ## Protocol source write restriction
 

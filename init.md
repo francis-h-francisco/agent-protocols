@@ -1,14 +1,19 @@
 # Init
 
-Universal session bootstrap:
+Universal session bootstrap, in any AI agent:
 
-`#init`
+`#init github.com/francis-h-francisco/agent-protocols`
 
-Canonical protocol source: `francis-h-francisco/agent-protocols`.
+(or `#init` in an agent that already knows the canonical source.)
 
-When the user sends `#init` without an argument, retrieve the canonical repository's current `init.md`, then read `VERSION`, `AI_ENTRY.md`, `AGENTS.md`, and `COMMANDS.md`. Follow the session bootstrap in `AI_ENTRY.md` before unrelated work. If the user supplies an explicit protocol source, use that source instead and verify it is intended.
+Open `AI_ENTRY.md` and follow its steps 1–5 before unrelated work:
+1. Load the protocol.
+2. Check the runtime connection.
+3. Guide the one-time connector setup if needed (`RUNTIME.md`).
+4. List accessible repositories, through the runtime's `repo_list` or your own authenticated GitHub integration.
+5. Report briefly, ending with "Send `#help` to see what you can do."
 
-Use the authenticated GitHub integration to verify access to the canonical protocol and enumerate the exact accessible `owner/repo` identifiers. Public HTTPS retrieval may load protocol text, but it does not prove authenticated GitHub project access. Verify the runtime connection status separately through its supported authenticated MCP/API path. Report any unavailable capability honestly.
+Report any unavailable capability honestly.
 
 ## Session behavior
 
@@ -24,7 +29,7 @@ This repository is the maintained instruction source. Consumer agents must not e
 
 Keep the response concise but distinguish readiness layers:
 - Protocol: loaded, with literal VERSION.
-- GitHub: authenticated integration verified/not verified; exact accessible `owner/repo` identifiers.
+- GitHub: repositories accessible through the runtime (`repo_list`) or the agent's own authenticated integration; exact `owner/repo` identifiers.
 - Runtime: authenticated/authorized, pending, or blocked; state what was actually tested.
 - Active project: verified `owner/repo` or `not selected`.
 - Next required onboarding action, if any.
