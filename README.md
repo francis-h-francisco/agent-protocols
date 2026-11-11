@@ -1,87 +1,82 @@
 # Agent Protocols
 
-**A portable command and continuity layer for AI-assisted projects.**
+**A portable protocol, project-onboarding, execution, and continuity layer for GitHub-connected AI agents.**
 
-Agent Protocols gives compatible AI agents a shared way to initialize sessions, select repositories, follow project instructions, execute approved work, and preserve handoffs in GitHub.
+Agent Protocols gives compatible AI agents a shared command contract for loading protocol rules, verifying connected repositories and runtime access, selecting or installing project context, coordinating authorized work, and preserving progress across sessions.
 
-One public protocol. A small command set. Each project's own repository remains its source of truth.
+## Important prerequisite: authenticated GitHub connection
 
-## Quick start
+The primary AI agent must support an authenticated GitHub connection/integration. It must be able to verify the canonical protocol and access the project repositories the user authorizes. Public web browsing or reading a raw Markdown URL alone does not prove project access.
 
-### First-time setup
+The full workflow also requires a supported authenticated connection to the Agent Protocols Runtime through MCP or an API/tool adapter. Compatibility varies by AI product and account plan. A free chat subscription does not automatically include API access, cloud execution, or MCP support.
 
-A fresh AI chat does not automatically know what `#init` means. Bootstrap the protocol first by sending:
+Connect GitHub using the AI product's official connection flow. Never paste tokens, API keys, passwords, or other secrets into chat.
 
-```text
-Read and follow https://raw.githubusercontent.com/francis-h-francisco/agent-protocols/main/init.md
-```
+## First-time setup
 
-If the agent cannot retrieve public URLs, open [init.md](init.md) and provide its contents to the agent.
+1. Connect GitHub to the AI agent using its official connection flow.
+2. Send `#init`. The agent loads the current canonical protocol, verifies the authenticated GitHub integration, lists exact accessible `owner/repo` identifiers, and reports runtime connection status. **It must not select a project, install project files, or start a task.**
+3. If runtime access is pending, report the exact missing connector/authorization and use the runtime's documented secure onboarding flow when one is available. Do not imply that an onboarding flow is already deployed or claim runtime readiness before identity, permissions, and capabilities are verified.
+4. Choose the project:
+   - `#project owner/repo` selects and verifies a project for this session without installing files.
+   - `#install owner/repo` optionally installs/merges project-local instructions/templates and selects the project after verification.
+5. Use `#next` / `#proceed` to inspect durable task state and execute the next authorized task.
 
-### Later sessions
+**Important:** `#init` alone does not complete project onboarding or start work. Protocol, GitHub, runtime, project, and task readiness are separate states. Follow the readiness report and resolve only the actual blockers.
 
-Once the agent has been configured with the protocol instructions, start a new session with:
+## Later sessions
 
-```text
-#init
-```
-
-This reloads the current protocol and command registry. If the agent does not retain the configured instructions between chats, repeat the first-time bootstrap prompt.
-
-Select a project after initialization:
-
-```text
-#project owner/repository
-```
-
-Initialization does not select or install a project.
+Start with `#init` to reload the canonical protocol and re-verify GitHub/runtime access. It does not silently restore or change the active project. Select the intended project with `#project owner/repo`, or use `#install owner/repo` if project-local setup is wanted, then use `#next` to resume work.
 
 ## Core commands
 
 | Command | Purpose |
 |---|---|
-| `#init` | Load or restore the protocol in a configured agent |
-| `#project owner/repo` | Select the active project for this session |
-| `#status` | Report verified project state |
-| `#next` / `#proceed` | Continue the next authorized task |
-| `#coor` | Publish or update the project coordination directive |
-| `#install owner/repo` | Optionally add project-local guidance |
-| `#pause` | Record progress, decisions, blockers, and next action |
-| `#help` | Show command guidance |
+| `#init` | Load protocol; verify GitHub connection, accessible repositories, and runtime status |
+| `#project owner/repo` | Select and verify the active project; no file installation |
+| `#install owner/repo` | Optional project-local instruction/template installation and project selection |
+| `#status` | Report verified protocol, GitHub, runtime, project, task, and blocker state |
+| `#coor [owner/repo]` | Inspect and publish/update the project's coordination directive |
+| `#next` / `#proceed` | Execute the next authorized task, then test and checkpoint |
+| `#pause` | Checkpoint and stop |
+| `#handoff` | Write and verify a durable continuation handoff |
 
-Commands describe workflow intent; they do not grant repository, account, deployment, or spending permissions.
+Commands express workflow intent. They do not grant repository permissions or approval for consequential actions.
 
-## How it works
+## How the team works
 
-1. **Initialize** — retrieve the canonical protocol and load its command and safety rules.
-2. **Select** — identify the exact project repository; never guess the target.
-3. **Inspect** — read project instructions, current state, and outstanding work.
-4. **Act** — make focused, reviewable changes only within the user's authorization.
-5. **Record** — verify outcomes and preserve decisions, progress, and handoffs in GitHub.
+1. The connected AI is the user's protocol-aware entry point and may contribute work.
+2. The runtime automatically selects an internal coordinator and specialists from the verified eligible free-agent pool. The user does not manually assemble the team.
+3. The coordinator understands the request, identifies system-side and user-side prerequisites, starts safe independent preflight in parallel, and gives the user a concise checklist.
+4. Unblocked work continues while missing user prerequisites are resolved. Implementation starts automatically once blockers are satisfied and authorization permits.
+5. Tasks and checkpoints persist in the cloud runtime and can continue when the original chat or coordinator is offline, subject to eligible free provider/runner capacity.
+6. When quotas or providers are unavailable, the runtime uses another legitimate free path where possible; otherwise it waits durably and resumes when capacity returns.
 
-The protocol is session-first. GitHub project records provide durable continuity between chats. If context or repository state is uncertain, the agent must retrieve and verify it before consequential work.
+The runtime is authoritative for identity, permissions, task state, dispatch, quotas, approvals, audit, checkpoints, and recovery. Its internal coordinator is replaceable.
 
-## Project continuity
+## Authorization surface
 
-Projects can use their existing README, `AGENTS.md`, issues, task records, and handoff documentation. Optional templates in this repository provide conventions for preflight instructions, coordination directives, and durable handoffs. They are not prerequisites.
+The normal interaction is through the user's connected AI and authenticated runtime tools. A minimal browser surface may be used for secure first-time authorization, recovery, approvals, or administration. It is not a duplicate AI chat UI.
 
-## Safety and boundaries
+## Source of truth and safety
 
-- The public protocol repository is read-only for agents using it. Protocol consumers must not change it unless its maintainer explicitly authorizes a specific maintenance task.
-- Project changes require the user's authorization and the target repository's permissions.
-- Agents must preserve existing project conventions and unrelated work.
-- Report only access, edits, tests, and deployments that were actually verified.
-- If required instructions or state cannot be retrieved, state the blocker instead of guessing.
+- The public protocol repository is read-only for consumer agents; maintainer-authorized protocol maintenance is separate.
+- Project truth lives in the selected project repository and durable runtime records.
+- Re-verify protocol, project, and runtime state at command boundaries and before consequential actions.
+- Never invent access, tests, quota, agent availability, or completed work.
+- Never commit secrets or paste credentials into chat.
+- No paid fallback, quota evasion, or silent quality reduction.
+- Human approval is required for consequential actions such as production deployment, destructive changes, protected-branch merges, billing/security changes, and external commitments.
 
 ## Protocol files
 
-- `init.md` — minimal bootstrap entry point
-- `AI_ENTRY.md` — initialization and execution flow
-- `AGENTS.md` — behavior and safety rules
-- `COMMANDS.md` — command registry
-- `CHECKPOINT_PROTOCOL.md` — continuity and handoffs
-- `SECURITY.md` — security requirements
-- `INSTALL.md` — optional project installation
-- `templates/` and `adapters/` — optional project and environment guidance
+- [BOOTSTRAP.md](BOOTSTRAP.md) — full bootstrap and operational onboarding contract
+- [init.md](init.md) — compact session bootstrap entry point
+- [AI_ENTRY.md](AI_ENTRY.md) — agent entry and execution rules
+- [AGENTS.md](AGENTS.md) — safety and behavior rules
+- [COMMANDS.md](COMMANDS.md) — command registry
+- [CHECKPOINT_PROTOCOL.md](CHECKPOINT_PROTOCOL.md) — continuity and handoffs
+- [SECURITY.md](SECURITY.md) — security requirements
+- [INSTALL.md](INSTALL.md) — optional project installation
 
-**The principle:** keep commands portable, project truth in GitHub, and every consequential action verifiable.
+**Principle:** verified GitHub access, explicit project context, authenticated runtime operations, replaceable agents, and resumable execution.

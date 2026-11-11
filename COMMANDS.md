@@ -1,41 +1,55 @@
 # Conversational Commands
 
-Commands express workflow intent, not platform permissions. This file is the universal command registry. After #init, the agent should understand these commands for the rest of the current chat without repeated explanations.
+Commands express workflow intent, not platform permissions. This file is the universal command registry. After `#init`, the agent should understand these commands for the rest of the current chat without repeated explanations.
 
-## Initialization and project selection
-- #init — initialize or restore the current chat session from the canonical protocol source. Load the command registry and rules into working context, verify retrieval, and respond ready. Does not select a project or install project files.
-- #init owner/repo — backward-compatible explicit protocol-source form when the user intends that repository to be the protocol source. Do not confuse it with project selection.
-- #project owner/repo — verify and select the active project for this session. Do not install files.
-- #help — show command help when asked.
+## Session initialization and readiness
 
-## Project commands
-- #install owner/repo — optional installation/merge of project-local preflight and continuity templates into the exact target repository. Set it as the active project only after verification. This is not required to use the protocol or its commands.
-- #coor [owner/repo] — central coordination. Identify the explicit or active project; if neither exists, ask which repository. Inspect current project instructions, state, open work, and blockers. Publish/update the coordinator directive in the project's established location, or use .agent/coordination/CURRENT_DIRECTIVE.md when durable coordination is needed and no convention exists. Default to a reviewable branch and PR. Do not implement the directive's application task merely because #coor was invoked.
-- #start — start or resume the selected project's next clearly authorized task after verifying its current state.
-- #next / #proceed — execute the next appropriate approved task. Read the latest coordinator directive when one exists, then inspect task state, implement, verify, record, and report.
-- #modify — modify the selected project within the user's requested scope. For shared protocol changes, require explicit maintainer authorization.
-- #pause — checkpoint meaningful progress, record blockers and next action where project records exist, then stop execution.
-- #append — add newly supplied durable knowledge to the appropriate project record; do not invent facts.
-- #status [owner/repo] — report verified repository, task, PR, CI, directive, and blocker status. If no repository is supplied or active, ask which one.
-- #sync-protocol owner/repo — update protocol-managed files in the named project only when authorized. Preserve project state and customizations. Never modify the protocol source as a side effect.
+- `#init` — load/restore the canonical protocol in this chat; verify authenticated GitHub access; enumerate exact accessible `owner/repo` identifiers; inspect authenticated runtime connection status; report readiness layers. Does **not** select/install a project, change active project, create tasks, or execute work.
+- `#init owner/repo` — backward-compatible explicit protocol-source form only when the user intends that repository to be the protocol source. Do not confuse it with project selection.
+- `#help` — show command help when asked.
+
+## Project selection and setup
+
+- `#project owner/repo` — verify and select the exact active project for this session. Does not install files.
+- `#install owner/repo` — optional project-local setup: inspect existing guidance, then install/merge project-specific instructions/templates only when requested. Preserve existing content. Set the project active only after successful verification and installation.
+- `#coor [owner/repo]` — inspect project instructions/state/open work/blockers and publish/update its coordination directive in the established location (or `.agent/coordination/CURRENT_DIRECTIVE.md` if genuinely needed). Default to a reviewable branch/PR. Does not execute the directive's application task.
+
+## Work and continuity
+
+- `#start` — start/resume the selected project's next clearly authorized task after verifying current state.
+- `#next` / `#proceed` — inspect durable task state and approvals, execute the next authorized task, test, checkpoint, update durable status, and report results/blockers.
+- `#modify` — modify the selected project within the user's requested scope. Shared protocol changes require explicit maintainer authorization.
+- `#pause` — checkpoint meaningful progress, record blockers and next action, then stop.
+- `#append` — add newly supplied durable knowledge to the appropriate project record; do not invent facts.
+- `#status [owner/repo]` — report verified protocol/GitHub/runtime/project/task/PR/CI/directive/blocker state. If no repository is supplied or active, report global readiness without guessing a project.
+- `#sync-protocol owner/repo` — update protocol-managed files in the named project only when authorized. Never modify the canonical protocol source as a side effect.
+- `#handoff` — write a complete durable continuation handoff to the designated runtime/project GitHub record and verify the write.
 
 ## Routing rules
-1. If not initialized, attempt canonical bootstrap automatically when possible. Continue the requested command if its meaning, target, and authorization are clear.
-2. Use an explicit repository argument for that command. Otherwise use the active project in this chat.
-3. If a repository is required but unavailable, ask one concise question. Never infer the target from unrelated context or account ownership.
-4. A command may retrieve project files as needed; it must not require the user to paste instructions already accessible through GitHub.
-5. If a project lacks .agent/PROJECT_PREFLIGHT.md or docs/agent-handoff/, continue using verified repository guidance. These are optional conventions, not prerequisites.
-6. Commands do not override the user's explicit restrictions, security rules, or approval boundaries.
+
+1. If not initialized, attempt canonical bootstrap automatically when tools are available. Continue the requested command if its meaning, target, and authorization are clear.
+2. Use an explicit repository argument for that command; otherwise use the active project in this chat.
+3. If a project is required but none is selected/supplied, ask one concise question. Never infer a project from account ownership or unrelated history.
+4. Retrieve project instructions/state from GitHub when needed; do not require the user to paste accessible information.
+5. Project-local preflight and handoff files are optional conventions; continue using verified existing project guidance when absent.
+6. Commands do not override user restrictions, security rules, or approval boundaries.
 
 ## Coordinator directive lifecycle
-The coordinator directive is a control-plane instruction, not a duplicate task queue. Keep task details and execution progress in the project's existing task/handoff system. A directive should identify a unique ID, issued/updated time (UTC), target repository, objective, next action, priority, acceptance criteria, constraints/approvals, references, and status.
 
-The coordinator publishes the directive. The executing agent reads it at initialization/resume and before choosing the next task; it records the acknowledged directive ID in its normal task/checkpoint record when available. Do not let the agent overwrite coordinator-authored intent while acknowledging it. If the directive conflicts with explicit user instructions or safety policy, stop and ask.
+The coordinator directive is a control-plane instruction, not a duplicate task queue. Keep task details and execution progress in the project's established task/handoff system. A directive should identify a unique ID, issue/update time (UTC), target repository, objective, next action, priority, acceptance criteria, constraints/approvals, references, and status.
 
-#coor reports the repository, directive summary, branch/PR or verified publication result, and blockers. It does not authorize external outreach, spending, deployment, destructive changes, or execution of the application task.
+The coordinator publishes the directive. The executing agent reads it at initialization/resume and before choosing the next task; it records the acknowledged directive ID in its normal task/checkpoint record when available. Do not let the agent overwrite coordinator-authored intent while acknowledging it. If it conflicts with explicit user instructions or safety policy, stop and ask.
+
+`#coor` reports repository, directive summary, branch/PR or verified publication result, and blockers. It does not authorize external outreach, spending, deployment, destructive changes, or execution of the application task.
 
 ## Bootstrap response
-Keep #init concise: protocol ready/version, command registry loaded, verified retrieval/access status, active project or not selected, ready. Do not dump this command list unless asked.
+
+Keep `#init` concise but truthful. Report protocol/version, authenticated GitHub verification and exact accessible repository identifiers, runtime connection status, and active project or not selected. Do not dump the command catalog unless asked.
 
 ## Protocol source write restriction
-The public francis-h-francisco/agent-protocols repository is read-only for consumer agents. No edit, branch, commit, push, PR, or sync is allowed unless the user explicitly identifies themselves as its maintainer and directly authorizes that specific protocol change. Command syntax does not grant permissions.
+
+The public `francis-h-francisco/agent-protocols` repository is read-only for consumer agents. No edit, branch, commit, push, PR, or sync is allowed unless the user explicitly identifies themselves as its maintainer and directly authorizes that specific protocol change. Command syntax does not grant permissions.
+
+## Automatic team and background execution
+
+The runtime automatically selects the internal coordinator and specialists from the verified eligible pool. The connected AI is the user's entry point and may contribute; it is not assumed to be the permanent coordinator. Background work is runtime-owned and must survive chat closure. Use legitimate free capacity only, preserve required quality, and wait/resume safely when all eligible capacity is exhausted.

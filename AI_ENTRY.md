@@ -1,65 +1,72 @@
 # AI Agent Entry Point
 
-This protocol is session-first and repository-backed. The minimal root init.md is the universal bootstrap entry point.
+This protocol is repository-backed and command-driven. The minimal root `init.md` is the universal session bootstrap entry point. Read BOOTSTRAP.md for the complete distinction between protocol readiness and operational/project readiness.
 
 ## Session initialization
 
-When the user sends #init with no argument, load the canonical protocol from francis-h-francisco/agent-protocols. If an explicit protocol source is supplied, retrieve that exact source and verify it. Read VERSION, this file, AGENTS.md, and COMMANDS.md; read CHECKPOINT_PROTOCOL.md and SECURITY.md before project execution or when relevant.
+When the user sends `#init` with no argument, load the canonical protocol from `francis-h-francisco/agent-protocols`. If an explicit protocol source is supplied, retrieve that exact source and verify it. Read VERSION, this file, AGENTS.md, and COMMANDS.md; read CHECKPOINT_PROTOCOL.md and SECURITY.md before project execution or when relevant.
 
-Use public HTTPS/raw retrieval first, an existing GitHub integration second, and browser/search third. If all methods fail, state the concrete blocker. Never pretend the protocol was loaded.
+The primary AI must verify its authenticated GitHub integration, confirm access to the canonical protocol, and enumerate exact accessible `owner/repo` identifiers. It must separately verify whether the authenticated Agent Protocols Runtime MCP/API connection is available. Public URL access alone is not proof of authenticated GitHub or runtime access.
 
 After reading the command registry and rules:
 1. Load command meanings, routing rules, safety boundaries, and recovery procedure into the current chat's working context.
-2. Keep this protocol context available for the remainder of the current chat. Do not ask the user to repeat command definitions or reinitialize before each command.
-3. Track the active project only when the user explicitly selects one or it is unambiguously established in the current session. Otherwise leave it unset.
-4. Do not require project-local installation, a ChatGPT Project, .agent/, or docs/agent-handoff/ merely to use universal commands.
-5. Return a compact response: protocol ready/version, command registry loaded, verified retrieval/access status, active project or not selected, ready.
+2. Keep protocol context available for the remainder of the current chat. Do not ask the user to repeat command definitions or reinitialize before each command.
+3. Report GitHub repository access and runtime readiness separately, including exact blockers.
+4. Report the active project only if already explicitly selected or unambiguously established in the current session; otherwise leave it unset.
+5. Do not select/install a project, create project files, change active project, create a task, or start execution as a side effect of `#init`.
+6. Return a concise readiness report with protocol version, GitHub verification/repository identifiers, runtime status, and active project or not selected.
 
-A fresh chat does not reliably inherit another chat's working context. When the user sends #init in a new chat, retrieve the current protocol again and restore session readiness. Do not claim cross-chat memory unless the platform explicitly verifies it.
+A fresh chat does not reliably inherit another chat's working context. When the user sends `#init` in a new chat, retrieve the current source again. Do not claim cross-chat memory unless the platform explicitly verifies it.
 
 ## Command dispatch
 
-Treat COMMANDS.md as the universal command registry. Recognize commands by their leading command token, even when the user adds a repository, task, or natural-language details. Each command defines its own required retrieval and action sequence. Do not make the user repeat a project preflight checklist for every command.
+Treat COMMANDS.md as the universal command registry. Recognize commands by their leading command token, even when the user adds a repository, task, or natural-language details. Each command defines its own required retrieval and action sequence.
 
-If a command is received before initialization, attempt the canonical bootstrap automatically when retrieval tools are available. Then continue the requested command if its meaning and authorization are clear. If the protocol cannot be retrieved, explain the limitation and ask only for the minimum information needed to proceed safely.
+If a command is received before initialization, attempt the canonical bootstrap automatically when retrieval tools are available. Then continue the requested command if its meaning, target, and authorization are clear. If protocol retrieval fails, explain the limitation and ask only for the minimum information needed.
 
 Initialization and command recognition are not authorization to perform consequential actions. Follow explicit user instructions, repository permissions, and safety rules.
 
 ## Session context and recovery
 
-Maintain a compact working context for the current chat:
-- protocol version and whether the command registry was successfully loaded;
+Maintain compact working context for the current chat:
+- protocol version and command-registry status;
+- GitHub connection verification and accessible repository identifiers;
+- runtime connection/authorization status and verified capabilities;
 - active repository, if selected;
-- current task/goal and its status when applicable;
-- unresolved approval, safety, or access blockers;
-- latest repository state verified.
+- current task/status and unresolved approvals, safety, or access blockers;
+- latest repository/runtime state verified.
 
-At the start of a command, before consequential changes, and whenever context appears incomplete or contradictory:
-1. Check whether the command registry and required project context are still available.
-2. If protocol details are missing, uncertain, or inconsistent, re-fetch relevant protocol files from the canonical source.
-3. Re-verify the active repository, branch, commit, task, and approvals from GitHub/project sources as needed.
+At command start, before consequential changes, and whenever context appears incomplete or contradictory:
+1. Check whether the command registry and required project context remain available.
+2. Re-fetch relevant protocol files if missing, uncertain, inconsistent, or changed.
+3. Re-verify the active repository, branch, commit, task, approvals, and runtime state as needed.
 4. Resume only after required facts are verified.
 
-If recovery succeeds, continue and briefly disclose material recovery when useful. If recovery fails, stop before consequential action and tell the user exactly what is missing. Never silently guess, fabricate memory, or claim to detect every form of hidden context degradation. Agents cannot continuously monitor while idle; checks occur when a message or task boundary gives the agent an opportunity.
+If recovery succeeds, continue and briefly disclose material recovery when useful. If recovery fails, stop before consequential action and state exactly what is missing. Do not claim perfect detection of hidden context degradation; checks occur at interaction/task boundaries.
 
-## Project selection and retrieval
+## Project selection and installation
 
-- #project owner/repo selects the active project for this session after verifying the repository.
-- #install owner/repo is optional: it installs or merges project-local instructions/templates. It is not required for command recognition or ordinary repository work.
-- When a command names a repository, use that explicit repository for that command. Do not silently change the session's active project unless the command says to.
-- When no repository is supplied and no active project is known, ask which repository to use. Never guess based on account ownership or unrelated chat history.
-- Retrieve project instructions and state from the target repository when relevant. Prefer existing README, AGENTS.md, contributing guidance, project specifications, task records, and coordination directives. If standard files do not exist, use available verified project documentation; do not require creating a project folder just to continue.
+- `#project owner/repo` verifies the exact repository and selects it as the active project for this session. It does not install files.
+- `#install owner/repo` is a separate, optional project setup command. It verifies the exact repository, inspects existing instructions, and installs/merges project-local instructions/templates only when requested. It sets the active project only after successful verification and installation.
+- `#init` does neither of these and must never silently change the active project.
+- When a command names a repository, use that explicit repository for that command. Do not silently change the active project unless the command explicitly does so.
+- If a command requires a project and none is selected or supplied, ask which repository to use. Never guess based on account ownership or unrelated chat history.
+- Prefer existing README, AGENTS.md, contributing guidance, project specifications, task records, and coordination directives. Do not require creating a project folder just to continue.
 
 ## Optional project continuity files
 
-Projects may adopt .agent/PROJECT_PREFLIGHT.md for project-specific instructions; .agent/coordination/CURRENT_DIRECTIVE.md for the latest coordinator directive; and docs/agent-handoff/ for durable state, tasks, decisions, reports, and reviews.
-
-These files are optional conventions, not prerequisites for session initialization or universal command recognition. Create or install them only when the user requests installation or a workflow genuinely needs durable records. If absent, use existing repository documentation and report any continuity limitation.
+Projects may adopt `.agent/PROJECT_PREFLIGHT.md`, `.agent/coordination/CURRENT_DIRECTIVE.md`, and `docs/agent-handoff/`. These are optional conventions, not prerequisites for session initialization or ordinary project work. Install them only when requested or genuinely needed for durable coordination.
 
 ## Project execution
 
-Before editing a target repository, inspect its current branch and commit, root instructions, relevant source, existing task/decision records, open PRs, and CI as tools permit. Preserve project-specific conventions and unrelated work. Make focused changes, test where feasible, and report verified outcomes, blockers, and next steps. Use a branch and PR by default unless the user explicitly directs another safe publication method.
+Before editing, inspect the current branch/commit, root instructions, relevant source, existing task/decision records, open PRs, and CI as tools permit. Preserve project conventions and unrelated work. Make focused changes, test where feasible, and report verified outcomes and blockers. Use a branch and PR by default unless the user explicitly directs another safe method.
 
 ## Protocol repository is read-only for consumers
 
-Agents consuming francis-h-francisco/agent-protocols are users, not contributors. Do not edit, branch, commit, push, open PRs, or synchronize changes to the protocol source unless the user explicitly identifies themselves as its maintainer and directly authorizes a specific protocol change. This restriction does not prevent authorized work in a separately designated project repository.
+Agents consuming `francis-h-francisco/agent-protocols` are users, not contributors. Do not edit, branch, commit, push, open PRs, or synchronize changes to the protocol source unless the user explicitly identifies themselves as its maintainer and directly authorizes a specific protocol maintenance task.
+
+## Current automatic-team contract
+
+The connected AI is the user's entry point and may contribute. The runtime automatically selects the internal coordinator and specialists from the verified eligible pool. Do not require manual team selection.
+
+For each task, the coordinator identifies system/user prerequisites, launches safe independent preflight in parallel, provides a concise checklist, continues unblocked work, and starts implementation when blockers are satisfied and authorization permits. Durable background execution and recovery belong to the runtime, not the chat. Re-check protocol/project/runtime truth at command boundaries. See BOOTSTRAP.md and the runtime specification for quota, quality, approval, and recovery rules.
