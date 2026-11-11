@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.6.0
+- Added BOOTSTRAP.md as the authoritative first-run and session-recovery contract.
+- Stated the prerequisite plainly: the primary AI must have an authenticated GitHub integration; public Markdown retrieval alone does not prove project access.
+- Separated five readiness layers (protocol, GitHub, runtime, project, task) and required each to be reported truthfully.
+- Kept #init as protocol/session bootstrap only: it verifies GitHub access, lists exact accessible owner/repo identifiers, and reports runtime status, but never selects or installs a project or starts work.
+- Kept #project owner/repo (select), #install owner/repo (optional project-local setup) and #next/#proceed (execution) as distinct steps.
+- Described the automatic-team and durable background execution contract of a connected runtime, applicable only after runtime readiness is verified.
+- Reaffirmed no paid fallback, no quota evasion, and no silent quality reduction.
+
 ## 1.5.0
 - Shifted the protocol to a session-first model: #init loads universal command definitions into the current chat context.
 - Added canonical no-argument #init behavior and documented reinitialization in each fresh chat without assuming cross-chat memory.
