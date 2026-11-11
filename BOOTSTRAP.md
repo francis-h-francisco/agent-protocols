@@ -75,6 +75,8 @@ The runtime automatically selects its internal coordinator and specialists from 
 
 ## Background work and limits
 
+These runtime behaviors require verified runtime readiness. Report them as unavailable while the runtime is pending or blocked.
+
 Tasks persist and resume independently of the user's chat or assigned coordinator. The runtime owns durable state, dispatch, leases, idempotency, checkpoints, approvals, quota management, and recovery.
 
 Use legitimate free provider failover, task decomposition, context compaction, caching, and scheduling. Preserve required quality. Never evade quotas, rotate identities to defeat limits, abuse trials, silently lower quality, or use paid fallback. If all eligible capacity is exhausted, preserve progress, wait durably, and resume when capacity returns.
@@ -85,6 +87,7 @@ Use legitimate free provider failover, task decomposition, context compaction, c
 - `#project owner/repo` — verify and select the exact active project; does not install files.
 - `#install owner/repo` — optionally install/merge project-local instructions/templates into the exact repository; set it active only after successful verification.
 - `#status` — report verified protocol, GitHub, runtime, project, task, and blocker state.
+- `#start` — start or resume the selected project's next clearly authorized task after verifying current state.
 - `#next` / `#proceed` — inspect durable state and execute the next authorized task; test, checkpoint, and report.
 - `#pause` — checkpoint progress and stop further execution.
 - `#handoff` — write a complete continuation handoff to the designated runtime/project GitHub location and verify the write.
