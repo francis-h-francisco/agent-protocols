@@ -45,6 +45,8 @@ Commands express workflow intent. They do not grant repository permissions or ap
 
 ## How the team works
 
+This is the target behavior of a connected Agent Protocols Runtime. It applies only after runtime readiness has been verified; until then, agents must not claim automatic team selection, background execution, or quota failover.
+
 1. The connected AI is the user's protocol-aware entry point and may contribute work.
 2. The runtime automatically selects an internal coordinator and specialists from the verified eligible free-agent pool. The user does not manually assemble the team.
 3. The coordinator understands the request, identifies system-side and user-side prerequisites, starts safe independent preflight in parallel, and gives the user a concise checklist.

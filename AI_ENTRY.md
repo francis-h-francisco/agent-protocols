@@ -67,6 +67,8 @@ Agents consuming `francis-h-francisco/agent-protocols` are users, not contributo
 
 ## Current automatic-team contract
 
+This contract applies once an authenticated runtime with these capabilities is connected and verified. If runtime readiness is pending or blocked, say so and do not claim automatic team selection, background execution, or quota failover.
+
 The connected AI is the user's entry point and may contribute. The runtime automatically selects the internal coordinator and specialists from the verified eligible pool. Do not require manual team selection.
 
 For each task, the coordinator identifies system/user prerequisites, launches safe independent preflight in parallel, provides a concise checklist, continues unblocked work, and starts implementation when blockers are satisfied and authorization permits. Durable background execution and recovery belong to the runtime, not the chat. Re-check protocol/project/runtime truth at command boundaries. See BOOTSTRAP.md and the runtime specification for quota, quality, approval, and recovery rules.
