@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.8.0
+- RUNTIME.md describes how the team works:
+  - plan, do the work, test in a temporary GitHub Codespace with automatic fixes, independent review, approval, draft PR;
+  - immediate failover between free providers;
+  - the task budget, member limits and the owner's path rules.
+- GitHub access spans every GitHub account the owner connects to the runtime.
+- New commands:
+  - `#export` and `#notify`;
+  - owner-only `#pause-all`, `#resume-all`, `#providers` and `#paths`;
+  - guidance for giving the team work (files deliverables, context files, test command).
+- Corrected the REST mirror path to `/api/v1/tools/<tool_name>`.
+
 ## 1.7.0
 - The standard first command is `#init github.com/francis-h-francisco/agent-protocols`, which works in any AI agent. The README's first line sends agents to `AI_ENTRY.md`.
 - `AI_ENTRY.md` is now an ordered, step-by-step checklist (breadcrumbs): load the protocol, check the runtime, guide the one-time connector setup, list repositories, and reply ending with `#help`.
