@@ -26,6 +26,9 @@ Commands express workflow intent, not platform permissions. This file is the uni
 - `#people` — list people, their repositories and open invites (`access_list`).
 - `#grant name owner/repo ...` — set the repositories a person may use (`access_grant`).
 - `#revoke name` — disable a person and sign them out everywhere (`access_revoke`).
+- `#pause-all` / `#resume-all` — pause or resume all background work on the runtime (`dispatch_control`).
+- `#providers` — list free providers, their data policy, capacity and capability scores (`agent_pool`). "Enable/disable <provider>" uses `provider_set`, after the owner confirms.
+- `#paths owner/repo allow <prefixes> deny <prefixes>` — set where the team's file changes may go in that project (`project_settings`).
 
 Never ask for, accept, display or store anyone's password in chat.
 
@@ -39,6 +42,19 @@ Never ask for, accept, display or store anyone's password in chat.
 - `#status [owner/repo]` — report verified protocol/GitHub/runtime/project/task/PR/CI/directive/blocker state. If no repository is supplied or active, report global readiness without guessing a project.
 - `#sync-protocol owner/repo` — update protocol-managed files in the named project only when authorized. Never modify the canonical protocol source as a side effect.
 - `#handoff` — write a complete durable continuation handoff to the designated runtime/project GitHub record and verify the write.
+- `#export <task>` — the full record of one of your tasks (`task_export`), for backup or audit.
+- `#notify <https-url | off>` — turn your task notifications on or off (`notify_set`), for example an ntfy.sh topic URL.
+
+### Giving the runtime team work
+
+After `#project owner/repo`, describe the outcome in plain words. The agent calls `task_create` with:
+- a title, the outcome and acceptance criteria;
+- `deliverable_format: "files"` for code or file changes (`"markdown"` for a document);
+- `publish: true` to get a draft PR after approval;
+- `context_paths` for existing files to change;
+- `test_command` (owner only) to run the project's tests in a temporary Codespace and fix failures before review.
+
+Follow progress with `#status` or `task_events`. Ask the user before every `approval_decide`.
 
 ## Routing rules
 
