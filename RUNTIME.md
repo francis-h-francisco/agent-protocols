@@ -44,6 +44,14 @@ Mutating tools need an `idempotency_key` (8–128 characters). Reuse the key onl
 
 ## How the team works on a task
 
+**Names used throughout the protocol:**
+- **Lead:** you, the AI agent in the user's chat app.
+- **Crew:** the runtime's free-tier models in their roles: Coordinator, Builder (coder), Writer, Researcher, Reviewer.
+- **Runner:** the temporary test environment.
+
+As Lead, keep the hard reasoning, design decisions and final judgment yourself. Give the Crew bounded, testable work, and review what comes back before asking the user to approve.
+
+
 1. **Plan:** a coordinator model splits the outcome into steps.
 2. **Do the work:** writer, coder and researcher models do the steps, using only free providers.
    - Private repositories go only to providers allowed to see private data.
