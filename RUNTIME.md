@@ -24,7 +24,34 @@ Then:
 
 **No password yet?** Access is by invitation. The runtime owner creates a one-time invite link (`#invite`), and the person opens it to receive their own password. The owner's own password comes from the runtime's one-time setup page.
 
-**Product limits:** some products or plans have no custom connectors (for example, free tiers). Say so plainly. The protocol can still be read without the runtime, but nothing that needs the runtime is available.
+**Product limits:** some products or plans have no custom connectors (for example, free tiers). Say so plainly, then offer the **GitHub issue channel** below. The protocol itself can always be read without the runtime.
+
+## Without a connector: the GitHub issue channel (runtime 0.10.0 and later)
+
+Any AI, and the GitHub mobile app, can hand work to the team through GitHub issues.
+
+**Capability tiers.** Pick the path your product supports:
+
+| Your product | Path |
+|---|---|
+| Can add a custom MCP connector | Connect (above) and use the tools directly. |
+| Cannot connect, but can read GitHub or the web | Read the protocol, and draft issues from `templates/github/agent-task.md` for the user to open. |
+| Cannot read GitHub | Ask the user to paste the template, then fill it in. |
+
+**One-time setup by the runtime owner:**
+- link the person's GitHub account (`access_link_github`);
+- turn the channel on for the project (`project_settings` with `issue_channel: true`).
+
+**Each task:**
+1. The person opens an issue labelled `agent-task` from the filled template.
+2. The runtime checks the issue's **GitHub author**. It accepts the issue only if that account is linked to someone with access to the repository.
+3. It replies in the issue and posts progress there.
+4. When the work is ready, the person comments `/approve` (draft pull request) or `/reject`. `/pause`, `/resume` and `/cancel` also work.
+
+**Rules:**
+- Commands count only from the issue's author or the runtime owner, identified by GitHub's own authorship, never by what the text claims.
+- Issue text is visible to everyone who can see the repository, so it must never contain secrets.
+- Projects can copy `templates/github/ISSUE_TEMPLATE/agent-task.yml` into `.github/ISSUE_TEMPLATE/` to get a form.
 
 ## What the runtime provides once connected
 
@@ -38,7 +65,8 @@ Then:
 | `agent_pool`, `usage_status` | Free providers, capacity and quotas. |
 | `notify_set` | Opt-in phone or webhook notifications when a task needs approval, is done, failed or is blocked. |
 | `access_invite`, `access_list`, `access_grant`, `access_revoke` | Runtime owner only: manage who can use the runtime and which repositories they may use. |
-| `dispatch_control`, `provider_set`, `project_settings` | Runtime owner only: pause or resume all background work, switch free providers on or off, and set per-project path rules. |
+| `dispatch_control`, `provider_set`, `project_settings` | Runtime owner only: pause or resume all background work, switch free providers on or off, and set per-project path rules and the issue channel. |
+| `access_link_github` | Runtime owner only: link a person's GitHub account for the issue channel. |
 
 Mutating tools need an `idempotency_key` (8–128 characters). Reuse the key only when retrying the same action.
 

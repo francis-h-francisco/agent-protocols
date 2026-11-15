@@ -10,6 +10,11 @@
   - `#export` and `#notify`;
   - owner-only `#pause-all`, `#resume-all`, `#providers` and `#paths`;
   - guidance for giving the team work (files deliverables, context files, test command).
+- The GitHub issue channel, for AI products without custom connectors (runtime 0.10.0 and later):
+  - capability tiers in RUNTIME.md;
+  - `templates/github/agent-task.md` (for agents to draft from);
+  - an issue form at `templates/github/ISSUE_TEMPLATE/agent-task.yml`;
+  - the owner tool `access_link_github`.
 - Corrected the REST mirror path to `/api/v1/tools/<tool_name>`.
 - New portfolio-grade README:
   - the problem, how it works, and the Lead / Crew / Runner roles;

@@ -88,9 +88,9 @@ Stated precisely, because overclaiming is the failure mode this project is desig
 | Area | State |
 |---|---|
 | Protocol | v1.8.0. Commands, breadcrumbs, continuity and safety rules. |
-| Runtime | Version 0.8 is live: MCP, password sign-in, the task engine with review and approvals, and draft PRs. Version 0.9 (multi-account GitHub, test runner, failover, owner tools) is code-complete with 72 automated tests and is in live verification. |
+| Runtime | Version 0.8 is live: MCP, password sign-in, the task engine with review and approvals, and draft PRs. Version 0.9 (multi-account GitHub, test runner, failover, owner tools) is code-complete and in live verification. Version 0.10 adds the GitHub issue channel, for AI apps without custom connectors; it is code-complete with 77 automated tests. |
 | Verified live | Connecting from Claude, password sign-in, runtime status, repository listing. |
-| Pending live verification | The first end-to-end task, the test runner in a real cloud environment, connecting from a second AI app, and multi-account installs. |
+| Pending live verification | The first end-to-end task, the test runner in a real cloud environment, connecting from a second AI app, and multi-account installs, and the GitHub issue channel. |
 | Not yet done | An independent third-party security review. |
 
 ## Getting started
@@ -98,7 +98,7 @@ Stated precisely, because overclaiming is the failure mode this project is desig
 1. **Get access.** The runtime owner sends you a one-time invite link that gives you your own password. The owner gets theirs from the runtime's setup page.
 2. **Initialize.** In any AI app that supports custom MCP connectors, send `#init github.com/francis-h-francisco/agent-protocols`.
    - The first time in each app, the agent walks you through adding the runtime as a connector, and you enter your password in the sign-in window.
-   - Some products and plans, often free tiers, can't add custom connectors. The agent will say so.
+   - Some products and plans, often free tiers, can't add custom connectors. The agent will say so and offer the GitHub issue channel instead: it drafts an issue, you open it on GitHub, and you approve by replying `/approve`.
 3. **Work.** Send `#help`, choose a project with `#project owner/repo`, and describe what you want.
 
 | Command | Purpose |

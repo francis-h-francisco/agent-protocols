@@ -17,7 +17,7 @@ If you can reach none of them but the runtime is connected, call its `protocol_g
 **Step 3: if not connected, guide the one-time connection.** Using `RUNTIME.md`:
 - Give the user the steps for **your own product**, with the MCP endpoint ready to copy. They should never have to find it themselves.
 - Tell them the sign-in window will ask for their **access password**, and that the password goes only in that window, never in chat.
-- If your product or plan cannot add custom connectors, say so plainly.
+- If your product or plan cannot add custom connectors, say so plainly, and offer the GitHub issue channel instead (`RUNTIME.md`, "Without a connector"): you draft the issue from `templates/github/agent-task.md`, and the user opens it.
 - Stop and wait. When they say they are done, repeat step 2.
 
 **Step 4: GitHub readiness.** If the runtime is connected, call `repo_list`: the runtime is the GitHub bridge, and that list is the person's accessible repositories. Otherwise, use your own authenticated GitHub integration if you have one. Public web reading alone is not authenticated access.
