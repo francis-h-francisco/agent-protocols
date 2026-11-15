@@ -88,7 +88,7 @@ Stated precisely, because overclaiming is the failure mode this project is desig
 | Area | State |
 |---|---|
 | Protocol | v1.8.0. Commands, breadcrumbs, continuity and safety rules. |
-| Runtime | Version 0.8 is live: MCP, password sign-in, the task engine with review and approvals, and draft PRs. Version 0.9 (multi-account GitHub, test runner, failover, owner tools) is code-complete and in live verification. Version 0.10 adds the GitHub issue channel, for AI apps without custom connectors; it is code-complete with 77 automated tests. |
+| Runtime | Version 0.8 is live: MCP, password sign-in, the task engine with review and approvals, and draft PRs. Version 0.9 (multi-account GitHub, test runner, failover, owner tools) is code-complete and in live verification. Versions 0.10 and 0.11 add the GitHub issue channel (for AI apps without custom connectors) and request tiers with a `task_estimate` tool. Both are code-complete with 79 automated tests. |
 | Verified live | Connecting from Claude, password sign-in, runtime status, repository listing. |
 | Pending live verification | The first end-to-end task, the test runner in a real cloud environment, connecting from a second AI app, and multi-account installs, and the GitHub issue channel. |
 | Not yet done | An independent third-party security review. |

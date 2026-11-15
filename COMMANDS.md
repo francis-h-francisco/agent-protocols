@@ -47,12 +47,29 @@ Never ask for, accept, display or store anyone's password in chat.
 
 ### Giving the runtime team work
 
-After `#project owner/repo`, describe the outcome in plain words. The agent calls `task_create` with:
+After `#project owner/repo`, describe the outcome in plain words.
+
+**Estimate first (runtime 0.11.0 and later).** Before creating the task, the agent calls `task_estimate` with the same fields. It then shows the user, in two or three lines:
+- the **tier** and its reasons;
+- the expected model calls;
+- the options.
+
+| Tier | Meaning | What the agent does |
+|---|---|---|
+| **T0 Free** | Routine: documents, summaries, small bounded fixes. | Create the task. |
+| **T1 Free + verify** | Code changes with a test command. | Create the task; tests run and failures are fixed automatically. |
+| **T2 Boost suggested** | Security-sensitive, cross-module or large changes, or a project where recent tasks failed. | Say that free models may struggle. Offer: run it free anyway, split it into smaller tasks, or have the Lead (this AI app) do the hard part. A paid boost is not available yet. |
+| **T3 Lead-led** | Open decisions, architecture, or code changes with no acceptance criteria. | Settle the questions with the user first, then estimate again. |
+
+The user chooses. Never upgrade or spend silently. Free is always a complete option.
+
+Then the agent calls `task_create` with:
 - a title, the outcome and acceptance criteria;
 - `deliverable_format: "files"` for code or file changes (`"markdown"` for a document);
 - `publish: true` to get a draft PR after approval;
 - `context_paths` for existing files to change;
-- `test_command` (owner only) to run the project's tests in a temporary Codespace and fix failures before review.
+- `test_command` (owner only) to run the project's tests in a temporary Codespace and fix failures before review;
+- `max_model_calls` set to the estimate's `suggested_max_model_calls` when it is above the default.
 
 Follow progress with `#status` or `task_events`. Ask the user before every `approval_decide`.
 

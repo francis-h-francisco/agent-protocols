@@ -60,6 +60,7 @@ Any AI, and the GitHub mobile app, can hand work to the team through GitHub issu
 | `runtime_status` | Who you are (name, role, repositories), whether background work is running, and blockers. Call it first. |
 | `protocol_get` | The canonical protocol files, for agents that cannot read GitHub. |
 | `repo_list`, `repo_read` | GitHub access through the runtime, across every GitHub account the owner connected, limited to the repositories this person may use. **This satisfies GitHub readiness.** The agent does not need its own GitHub integration. |
+| `task_estimate` | Before `task_create`: the request's tier (T0–T3) with reasons, expected effort, today's free capacity and the options. Creates nothing. |
 | `project_register`, `task_create`, `task_get`, `task_list`, `task_events`, `artifact_get`, `task_control`, `task_export` | Hand work to the automatic AI team, follow it, and export its full record. |
 | `approval_list`, `approval_decide` | Approvals, such as opening a draft PR. Decide only after the user explicitly decides. |
 | `agent_pool`, `usage_status` | Free providers, capacity and quotas. |
