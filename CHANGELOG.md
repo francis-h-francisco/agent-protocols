@@ -1,5 +1,49 @@
 # Changelog
 
+## 1.8.0
+- RUNTIME.md describes how the team works:
+  - plan, do the work, test in a temporary GitHub Codespace with automatic fixes, independent review, approval, draft PR;
+  - immediate failover between free providers;
+  - the task budget, member limits and the owner's path rules.
+- GitHub access spans every GitHub account the owner connects to the runtime.
+- New commands:
+  - `#export` and `#notify`;
+  - owner-only `#pause-all`, `#resume-all`, `#providers` and `#paths`;
+  - guidance for giving the team work (files deliverables, context files, test command).
+- The GitHub issue channel, for AI products without custom connectors (runtime 0.10.0 and later):
+  - capability tiers in RUNTIME.md;
+  - `templates/github/agent-task.md` (for agents to draft from);
+  - an issue form at `templates/github/ISSUE_TEMPLATE/agent-task.yml`;
+  - the owner tool `access_link_github`.
+- Request tiers T0–T3 and `task_estimate` (runtime 0.11.0 and later): agents estimate before creating a task, show the tier and options, and the user chooses (COMMANDS.md).
+- Corrected the REST mirror path to `/api/v1/tools/<tool_name>`.
+- New portfolio-grade README:
+  - the problem, how it works, and the Lead / Crew / Runner roles;
+  - engineering highlights;
+  - an honest status table.
+- New ARCHITECTURE.md:
+  - components, the breadcrumb bootstrap, the task lifecycle;
+  - the security model, failure handling, and trade-offs.
+
+## 1.7.0
+- The standard first command is `#init github.com/francis-h-francisco/agent-protocols`, which works in any AI agent. The README's first line sends agents to `AI_ENTRY.md`.
+- `AI_ENTRY.md` is now an ordered, step-by-step checklist (breadcrumbs): load the protocol, check the runtime, guide the one-time connector setup, list repositories, and reply ending with `#help`.
+- New `RUNTIME.md` holds the runtime's endpoint, connection steps per AI product, sign-in, and tools. Users never need to know the URL.
+- Sign-in is a per-person access password, entered only in the runtime's sign-in window. Access is by owner invitation.
+- The runtime is the GitHub bridge (`repo_list`, `repo_read`), so a separate GitHub integration is optional. `protocol_get` serves the protocol through the runtime.
+- `#help` is defined as a short, readiness-aware guide.
+- Added the owner access commands `#invite`, `#people`, `#grant` and `#revoke`.
+- An unmerged 1.7.0 branch from earlier was superseded and is not this release.
+
+## 1.6.0
+- Added BOOTSTRAP.md as the authoritative first-run and session-recovery contract.
+- Stated the prerequisite plainly: the primary AI must have an authenticated GitHub integration; public Markdown retrieval alone does not prove project access.
+- Separated five readiness layers (protocol, GitHub, runtime, project, task) and required each to be reported truthfully.
+- Kept #init as protocol/session bootstrap only: it verifies GitHub access, lists exact accessible owner/repo identifiers, and reports runtime status, but never selects or installs a project or starts work.
+- Kept #project owner/repo (select), #install owner/repo (optional project-local setup) and #next/#proceed (execution) as distinct steps.
+- Described the automatic-team and durable background execution contract of a connected runtime, applicable only after runtime readiness is verified.
+- Reaffirmed no paid fallback, no quota evasion, and no silent quality reduction.
+
 ## 1.5.0
 - Shifted the protocol to a session-first model: #init loads universal command definitions into the current chat context.
 - Added canonical no-argument #init behavior and documented reinitialization in each fresh chat without assuming cross-chat memory.

@@ -1,0 +1,34 @@
+# Copy to .github/ISSUE_TEMPLATE/agent-task.yml in a project repository to get a form for the
+# Agent Protocols Runtime issue channel. Requires the runtime owner to enable the channel.
+name: Agent task
+description: Hand work to the Agent Protocols automatic AI team.
+title: "<short imperative title>"
+labels: ["agent-task"]
+body:
+  - type: markdown
+    attributes:
+      value: "Do not include secrets. Reply `/approve` or `/reject` in a comment when the runtime asks."
+  - type: textarea
+    id: outcome
+    attributes: { label: Outcome, description: What should exist when this is done. }
+    validations: { required: true }
+  - type: textarea
+    id: acceptance
+    attributes: { label: Acceptance criteria, description: "One checkable statement per line, starting with -." }
+    validations: { required: true }
+  - type: textarea
+    id: constraints
+    attributes: { label: Constraints }
+  - type: dropdown
+    id: format
+    attributes: { label: Format, options: ["Document", "Files (code changes)"] }
+    validations: { required: true }
+  - type: textarea
+    id: files
+    attributes: { label: Files to read, description: "Up to 8 repository paths, one per line, starting with -." }
+  - type: input
+    id: test
+    attributes: { label: Test command, description: "Files only; honoured only for the runtime owner, e.g. npm test" }
+  - type: dropdown
+    id: publish
+    attributes: { label: Publish, options: ["yes", "no"] }
