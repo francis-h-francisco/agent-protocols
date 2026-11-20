@@ -1,7 +1,7 @@
 # Live Agent Messaging Architecture
 
 Status: Proposed architecture for staged adoption
-Protocol: 1.7.0
+Protocol: 1.9.0
 Design principle: $0-first, GitHub remains the durable source of truth.
 
 ## 1. What "live" means
