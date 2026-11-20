@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.0
+- Portable assignments use GitHub Issues for coordination, advisory claims, handoffs, and independent review. `#start` resumes a claim and `#next` selects an eligible assignment.
+- Added an assignment template and a staged design for optional live notifications.
+
 ## 1.8.0
 - RUNTIME.md describes how the team works:
   - plan, do the work, test in a temporary GitHub Codespace with automatic fixes, independent review, approval, draft PR;

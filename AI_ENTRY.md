@@ -70,6 +70,10 @@ If recovery succeeds, continue and briefly disclose material recovery when usefu
 
 Projects may adopt `.agent/PROJECT_PREFLIGHT.md`, `.agent/coordination/CURRENT_DIRECTIVE.md`, and `docs/agent-handoff/`. These are optional conventions, not prerequisites for session initialization or ordinary project work. Install them only when requested or genuinely needed for durable coordination.
 
+## Portable assignments
+
+For a coordinated task, retrieve its GitHub Issue and comments before claiming or resuming work. Follow the claim and review rules in [COMMANDS.md](COMMANDS.md).
+
 ## Project execution
 
 Before editing, inspect the current branch/commit, root instructions, relevant source, existing task/decision records, open PRs, and CI as tools permit. Preserve project conventions and unrelated work. Make focused changes, test where feasible, and report verified outcomes and blockers. Use a branch and PR by default unless the user explicitly directs another safe method.
