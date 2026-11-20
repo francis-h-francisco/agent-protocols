@@ -87,8 +87,8 @@ Use legitimate free provider failover, task decomposition, context compaction, c
 - `#project owner/repo` — verify and select the exact active project; does not install files.
 - `#install owner/repo` — optionally install/merge project-local instructions/templates into the exact repository; set it active only after successful verification.
 - `#status` — report verified protocol, GitHub, runtime, project, task, and blocker state.
-- `#start` — start or resume the selected project's next clearly authorized task after verifying current state.
-- `#next` / `#proceed` — inspect durable state and execute the next authorized task; test, checkpoint, and report.
+- `#start` — resume the agent's existing claim after checking the issue, comments and project state.
+- `#next` / `#proceed` — claim one eligible task, check for conflicting claims, then execute, test and report.
 - `#pause` — checkpoint progress and stop further execution.
 - `#handoff` — write a complete continuation handoff to the designated runtime/project GitHub location and verify the write.
 
